@@ -2,182 +2,273 @@
   "products": [
     {
       "id": 1,
-      "name": "Элитный диван",
+      "name": {
+        "en": "Luxury Sofa",
+        "ru": "Элитный диван"
+      },
       "category": "sofa",
       "price": 899,
       "rating": 5,
       "inStock": true,
-      "description": "Роскошный диван из велюра премиум-класса",
+      "description": {
+        "en": "Luxury velvet sofa premium class",
+        "ru": "Роскошный диван из велюра премиум-класса"
+      },
       "image": "assets/images/c1.jpg",
       "oldPrice": 1120,
       "isFavorite": false
     },
     {
       "id": 2,
-      "name": "Современный диван",
+      "name": {
+        "en": "Modern Sofa",
+        "ru": "Современный диван"
+      },
       "category": "sofa",
       "price": 650,
       "rating": 4,
       "inStock": true,
-      "description": "Диван для гостиной в современном стиле",
+      "description": {
+        "en": "Living room sofa in modern style",
+        "ru": "Диван для гостиной в современном стиле"
+      },
       "image": "assets/images/c2.jpg",
       "oldPrice": 780,
       "isFavorite": false
     },
     {
       "id": 3,
-      "name": "Классический диван",
+      "name": {
+        "en": "Classic Sofa",
+        "ru": "Классический диван"
+      },
       "category": "sofa",
       "price": 720,
       "rating": 4.5,
       "inStock": false,
-      "description": "Диван в классическом стиле с мягкими подушками",
+      "description": {
+        "en": "Classic style sofa with soft pillows",
+        "ru": "Диван в классическом стиле с мягкими подушками"
+      },
       "image": "assets/images/c3.jpg",
       "oldPrice": 850,
       "isFavorite": false
     },
     {
       "id": 4,
-      "name": "Журнальный столик",
+      "name": {
+        "en": "Coffee Table",
+        "ru": "Журнальный столик"
+      },
       "category": "living",
       "price": 250,
       "rating": 4,
       "inStock": true,
-      "description": "Журнальный столик с металлическими ножками",
+      "description": {
+        "en": "Coffee table with metal legs",
+        "ru": "Журнальный столик с металлическими ножками"
+      },
       "image": "assets/images/c4.jpg",
       "oldPrice": 310,
       "isFavorite": false
     },
     {
       "id": 5,
-      "name": "Обеденный стол",
+      "name": {
+        "en": "Dining Table",
+        "ru": "Обеденный стол"
+      },
       "category": "kitchen",
       "price": 450,
       "rating": 4.5,
       "inStock": true,
-      "description": "Дубовый обеденный стол на 6 персон",
+      "description": {
+        "en": "Oak dining table for 6 persons",
+        "ru": "Дубовый обеденный стол на 6 персон"
+      },
       "image": "assets/images/c5.jpg",
       "oldPrice": 550,
       "isFavorite": false
     },
     {
       "id": 6,
-      "name": "Кухонные стулья",
+      "name": {
+        "en": "Kitchen Chairs",
+        "ru": "Кухонные стулья"
+      },
       "category": "kitchen",
       "price": 180,
       "rating": 4,
       "inStock": true,
-      "description": "Набор из мягких стульев для кухни",
+      "description": {
+        "en": "Set of soft chairs for kitchen",
+        "ru": "Набор из мягких стульев для кухни"
+      },
       "image": "assets/images/c6.jpg",
       "oldPrice": 230,
       "isFavorite": false
     },
     {
       "id": 7,
-      "name": "Кровать двуспальная",
+      "name": {
+        "en": "Double Bed",
+        "ru": "Кровать двуспальная"
+      },
       "category": "bedroom",
       "price": 1200,
       "rating": 5,
       "inStock": true,
-      "description": "Ортопедическая кровать с подъемным механизмом",
+      "description": {
+        "en": "Orthopedic bed with lifting mechanism",
+        "ru": "Ортопедическая кровать с подъемным механизмом"
+      },
       "image": "assets/images/c7.jpg",
       "oldPrice": 1500,
       "isFavorite": false
     },
     {
       "id": 8,
-      "name": "Прикроватная тумба",
+      "name": {
+        "en": "Nightstand",
+        "ru": "Прикроватная тумба"
+      },
       "category": "bedroom",
       "price": 150,
       "rating": 3.5,
       "inStock": true,
-      "description": "Тумба из массива дерева с мягкой обивкой",
+      "description": {
+        "en": "Wooden nightstand with soft upholstery",
+        "ru": "Тумба из массива дерева с мягкой обивкой"
+      },
       "image": "assets/images/c8.jpg",
       "oldPrice": 190,
       "isFavorite": false
     },
     {
       "id": 9,
-      "name": "Ванная полка",
+      "name": {
+        "en": "Bathroom Shelf",
+        "ru": "Ванная полка"
+      },
       "category": "bathroom",
       "price": 85,
       "rating": 4,
       "inStock": true,
-      "description": "Настенная полка для ванной из нержавеющей стали",
+      "description": {
+        "en": "Stainless steel wall shelf for bathroom",
+        "ru": "Настенная полка для ванной из нержавеющей стали"
+      },
       "image": "assets/images/c9.jpg",
       "oldPrice": 110,
       "isFavorite": false
     },
     {
       "id": 10,
-      "name": "Зеркало в раме",
+      "name": {
+        "en": "Framed Mirror",
+        "ru": "Зеркало в раме"
+      },
       "category": "decor",
       "price": 120,
       "rating": 4.5,
       "inStock": true,
-      "description": "Декоративное зеркало в раме",
+      "description": {
+        "en": "Decorative mirror in frame",
+        "ru": "Декоративное зеркало в раме"
+      },
       "image": "assets/images/c10.jpg",
       "oldPrice": 160,
       "isFavorite": false
     },
     {
       "id": 11,
-      "name": "Керамическая ваза",
+      "name": {
+        "en": "Ceramic Vase",
+        "ru": "Керамическая ваза"
+      },
       "category": "ceramics",
       "price": 65,
       "rating": 4,
       "inStock": false,
-      "description": "Керамическая ваза ручной работы",
+      "description": {
+        "en": "Handmade ceramic vase",
+        "ru": "Керамическая ваза ручной работы"
+      },
       "image": "assets/images/c11.jpg",
       "oldPrice": 85,
       "isFavorite": false
     },
     {
       "id": 12,
-      "name": "Настольная лампа",
+      "name": {
+        "en": "Desk Lamp",
+        "ru": "Настольная лампа"
+      },
       "category": "decor",
       "price": 95,
       "rating": 4,
       "inStock": true,
-      "description": "Светодиодная настольная лампа с диммером",
+      "description": {
+        "en": "LED desk lamp with dimmer",
+        "ru": "Светодиодная настольная лампа с диммером"
+      },
       "image": "assets/images/c12.jpg",
       "oldPrice": 120,
       "isFavorite": false
     },
     {
       "id": 13,
-      "name": "Шкаф-купе",
+      "name": {
+        "en": "Wardrobe",
+        "ru": "Шкаф-купе"
+      },
       "category": "bedroom",
       "price": 850,
       "rating": 4.5,
       "inStock": true,
-      "description": "Вместительный шкаф-купе с зеркальными дверями",
+      "description": {
+        "en": "Spacious wardrobe with mirrored doors",
+        "ru": "Вместительный шкаф-купе с зеркальными дверями"
+      },
       "image": "assets/images/c13.jpg",
       "oldPrice": 1050,
       "isFavorite": false
     },
     {
       "id": 14,
-      "name": "Барный стул",
+      "name": {
+        "en": "Bar Stool",
+        "ru": "Барный стул"
+      },
       "category": "kitchen",
       "price": 110,
       "rating": 3.5,
       "inStock": true,
-      "description": "Барный стул с металлическим каркасом",
+      "description": {
+        "en": "Bar stool with metal frame",
+        "ru": "Барный стул с металлическим каркасом"
+      },
       "image": "assets/images/c14.jpg",
       "oldPrice": 140,
       "isFavorite": false
     },
     {
-      "name": "Пуф мягкий",
+      "id": 15,
+      "name": {
+        "en": "Soft Pouf",
+        "ru": "Пуф мягкий"
+      },
       "category": "living",
       "price": 75,
       "rating": 4,
       "inStock": true,
-      "description": "Мягкий пуф для отдыха в гостиной",
+      "description": {
+        "en": "Soft pouf for relaxing in the living room",
+        "ru": "Мягкий пуф для отдыха в гостиной"
+      },
       "image": "assets/images/c15.jpg",
       "oldPrice": 95,
-      "id": 15
+      "isFavorite": false
     }
   ],
   "favorites": [],
@@ -249,14 +340,20 @@
       "items": [
         {
           "productId": 2,
-          "name": "Современный диван",
+          "name": {
+            "en": "Modern Sofa",
+            "ru": "Современный диван"
+          },
           "price": 650,
           "quantity": 1,
           "image": "assets/images/c2.jpg"
         },
         {
           "productId": 4,
-          "name": "Журнальный столик",
+          "name": {
+            "en": "Coffee Table",
+            "ru": "Журнальный столик"
+          },
           "price": 250,
           "quantity": 1,
           "image": "assets/images/c4.jpg"
@@ -274,7 +371,10 @@
       "items": [
         {
           "productId": 4,
-          "name": "Журнальный столик",
+          "name": {
+            "en": "Coffee Table",
+            "ru": "Журнальный столик"
+          },
           "price": 250,
           "quantity": 1,
           "image": "assets/images/c4.jpg"
@@ -292,7 +392,10 @@
       "items": [
         {
           "productId": 1,
-          "name": "Элитный диван",
+          "name": {
+            "en": "Luxury Sofa",
+            "ru": "Элитный диван"
+          },
           "price": 899,
           "quantity": 1,
           "image": "assets/images/c1.jpg"
@@ -309,9 +412,15 @@
       "userId": 1776977592547,
       "userNickname": "IvaB211Star",
       "productId": 2,
-      "productName": "Современный диван",
+      "productName": {
+        "en": "Modern Sofa",
+        "ru": "Современный диван"
+      },
       "rating": 5,
-      "text": "Отличный диван! Очень удобный и качественный. Рекомендую всем!",
+      "text": {
+        "en": "Great sofa! Very comfortable and high quality. I recommend to everyone!",
+        "ru": "Отличный диван! Очень удобный и качественный. Рекомендую всем!"
+      },
       "createdAt": "2026-04-24T11:00:00.000Z"
     },
     {
@@ -319,9 +428,15 @@
       "userId": 1777038977348,
       "userNickname": "IB261Ultra",
       "productId": 4,
-      "productName": "Журнальный столик",
+      "productName": {
+        "en": "Coffee Table",
+        "ru": "Журнальный столик"
+      },
       "rating": 5,
-      "text": "Отличный диван! Очень удобный и качественный. Рекомендую всем! супер",
+      "text": {
+        "en": "Great sofa! Very comfortable and high quality. I recommend to everyone! super",
+        "ru": "Отличный диван! Очень удобный и качественный. Рекомендую всем! супер"
+      },
       "createdAt": "2026-04-24T14:20:11.134Z"
     }
   ]

@@ -502,3 +502,360 @@ body {
         align-items: flex-start;
     }
 }
+
+
+.dark-theme .main-content {
+    background: #1a1a1a !important;
+}
+
+.dark-theme .catalog-header {
+    background: #252525 !important;
+    background: linear-gradient(135deg, #252525 0%, #1a1a1a 100%) !important;
+}
+
+.dark-theme .catalog-header h1 {
+    color: #e8e8e8 !important;
+}
+
+.dark-theme .catalog-header p {
+    color: #aaaaaa !important;
+}
+
+.dark-theme .back-link {
+    background: #3a3a3a !important;
+    color: #e8e8e8 !important;
+}
+
+.dark-theme .back-link:hover {
+    background: #555555 !important;
+}
+
+.dark-theme .feedback-container {
+    background-color: transparent !important;
+}
+
+.dark-theme .feedback-form-container {
+    background: #2a2a2a !important;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3) !important;
+}
+
+.dark-theme .feedback-form-container h2 {
+    color: #e8e8e8 !important;
+}
+
+.dark-theme .form-group label {
+    color: #cccccc !important;
+}
+
+.dark-theme .product-select,
+.dark-theme .form-group textarea,
+.dark-theme .filter-select {
+    background: #3a3a3a !important;
+    border-color: #555555 !important;
+    color: #e8e8e8 !important;
+}
+
+.dark-theme .product-select:focus,
+.dark-theme .form-group textarea:focus,
+.dark-theme .filter-select:focus {
+    border-color: #888888 !important;
+}
+
+.dark-theme .product-select::placeholder,
+.dark-theme .form-group textarea::placeholder {
+    color: #888888 !important;
+}
+
+.dark-theme .rating-star {
+    color: #555555 !important;
+}
+
+.dark-theme .rating-star.active {
+    color: #FFC107 !important;
+}
+
+.dark-theme .char-counter {
+    color: #aaaaaa !important;
+}
+
+.dark-theme .char-counter.warning {
+    color: #ff6b6b !important;
+}
+
+.dark-theme .char-counter.valid {
+    color: #6bff6b !important;
+}
+
+.dark-theme .submit-btn {
+    background: #555555 !important;
+    color: #e8e8e8 !important;
+}
+
+.dark-theme .submit-btn:hover:not(:disabled) {
+    background: #777777 !important;
+}
+
+.dark-theme .submit-btn:disabled {
+    background: #3a3a3a !important;
+    color: #777777 !important;
+}
+
+.dark-theme .reviews-list {
+    background: #2a2a2a !important;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3) !important;
+}
+
+.dark-theme .reviews-list h2 {
+    color: #e8e8e8 !important;
+}
+
+.dark-theme .review-card {
+    background: #222222 !important;
+}
+
+.dark-theme .review-card:hover {
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3) !important;
+}
+
+.dark-theme .review-nickname {
+    color: #e8e8e8 !important;
+}
+
+.dark-theme .review-date {
+    color: #888888 !important;
+}
+
+.dark-theme .review-product {
+    color: #aaaaaa !important;
+}
+
+.dark-theme .review-rating .star {
+    color: #FFC107 !important;
+}
+
+.dark-theme .review-text {
+    color: #cccccc !important;
+}
+
+.dark-theme .review-avatar {
+    background: #555555 !important;
+    color: #e8e8e8 !important;
+}
+
+.dark-theme .no-reviews,
+.dark-theme .loading {
+    color: #aaaaaa !important;
+}
+
+.dark-theme .auth-required {
+    background: #332a00 !important;
+    border-color: #ffc107 !important;
+    color: #ffd966 !important;
+}
+
+.dark-theme .auth-required a {
+    color: #aaaaaa !important;
+}
+
+.dark-theme .auth-required a:hover {
+    color: #e8e8e8 !important;
+}
+
+.dark-theme .error-message {
+    color: #ff6b6b !important;
+}
+
+.dark-theme .vertical-line {
+    background-color: #0a0a0a !important;
+}
+
+.dark-theme .vertical-line::before {
+    background: linear-gradient(to bottom, #555555, #333333) !important;
+}
+
+.dark-theme .menu-item a {
+    color: #e0e0e0 !important;
+}
+
+.dark-theme .menu-item a:hover {
+    background: rgba(85, 85, 85, 0.3) !important;
+}
+
+.dark-theme .menu-item a:hover span {
+    color: #ffffff !important;
+}
+
+.dark-theme .menu-item img {
+    filter: brightness(0) invert(1) !important;
+}
+
+.dark-theme .logo-container img {
+    filter: brightness(0) invert(1) !important;
+}
+
+.dark-theme .active-indicator {
+    background: #888888 !important;
+}
+
+.dark-theme .message-popup {
+    background: #3a3a3a !important;
+    color: #e8e8e8 !important;
+}
+
+.dark-theme .message-popup.error {
+    background: #8b3a3a !important;
+}
+
+.dark-theme .message-popup.success {
+    background: #2e7d32 !important;
+}
+
+
+
+.dark-theme .main-content {
+    background: #1a1a1a !important;
+}
+
+.dark-theme .catalog-header {
+    background: #252525 !important;
+    background: linear-gradient(135deg, #252525 0%, #1a1a1a 100%) !important;
+}
+
+.dark-theme .catalog-header h1 {
+    color: #e8e8e8 !important;
+}
+
+.dark-theme .catalog-header p {
+    color: #aaaaaa !important;
+}
+
+.dark-theme .back-link {
+    background: #3a3a3a !important;
+    color: #e8e8e8 !important;
+}
+
+.dark-theme .back-link:hover {
+    background: #555555 !important;
+}
+
+.dark-theme .feedback-form-container {
+    background: #2a2a2a !important;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3) !important;
+}
+
+.dark-theme .feedback-form-container h2 {
+    color: #e8e8e8 !important;
+}
+
+.dark-theme .form-group label {
+    color: #cccccc !important;
+}
+
+.dark-theme .product-select,
+.dark-theme .form-group textarea,
+.dark-theme .filter-select {
+    background: #3a3a3a !important;
+    border-color: #555555 !important;
+    color: #e8e8e8 !important;
+}
+
+.dark-theme .product-select:focus,
+.dark-theme .form-group textarea:focus,
+.dark-theme .filter-select:focus {
+    border-color: #888888 !important;
+}
+
+.dark-theme .rating-star {
+    color: #555555 !important;
+}
+
+.dark-theme .rating-star.active {
+    color: #FFC107 !important;
+}
+
+.dark-theme .char-counter {
+    color: #aaaaaa !important;
+}
+
+.dark-theme .char-counter.warning {
+    color: #ff6b6b !important;
+}
+
+.dark-theme .char-counter.valid {
+    color: #6bff6b !important;
+}
+
+.dark-theme .submit-btn {
+    background: #555555 !important;
+    color: #e8e8e8 !important;
+}
+
+.dark-theme .submit-btn:hover:not(:disabled) {
+    background: #777777 !important;
+}
+
+.dark-theme .submit-btn:disabled {
+    background: #3a3a3a !important;
+    color: #777777 !important;
+}
+
+.dark-theme .reviews-list {
+    background: #2a2a2a !important;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3) !important;
+}
+
+.dark-theme .reviews-list h2 {
+    color: #e8e8e8 !important;
+}
+
+.dark-theme .review-card {
+    background: #222222 !important;
+}
+
+.dark-theme .review-nickname {
+    color: #e8e8e8 !important;
+}
+
+.dark-theme .review-date {
+    color: #888888 !important;
+}
+
+.dark-theme .review-product {
+    color: #aaaaaa !important;
+}
+
+.dark-theme .review-rating .star {
+    color: #FFC107 !important;
+}
+
+.dark-theme .review-text {
+    color: #cccccc !important;
+}
+
+.dark-theme .review-avatar {
+    background: #555555 !important;
+    color: #e8e8e8 !important;
+}
+
+.dark-theme .no-reviews,
+.dark-theme .loading {
+    color: #aaaaaa !important;
+}
+
+.dark-theme .auth-required {
+    background: #332a00 !important;
+    border-color: #ffc107 !important;
+    color: #ffd966 !important;
+}
+
+.dark-theme .auth-required a {
+    color: #aaaaaa !important;
+}
+
+.dark-theme .auth-required a:hover {
+    color: #e8e8e8 !important;
+}
+
+.dark-theme .error-message {
+    color: #ff6b6b !important;
+}

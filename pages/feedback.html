@@ -5,50 +5,51 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>Отзывы - Greenery</title>
     <link rel="stylesheet" href="../css/feedback.css">
-        <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🌿%3C/text%3E%3C/svg%3E">
-
+    <link rel="stylesheet" href="../css/themes.css">
+    <link rel="stylesheet" href="../css/profile.css">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🌿%3C/text%3E%3C/svg%3E">
 </head>
 <body>
     <div class="vertical-line">
         <div class="logo-container">
-            <img src="../assets/icons/logo.png" alt="logo">
+            <img src="../assets/icons/logo.png" alt="logo" data-theme-img data-light-src="../assets/icons/logo.png" data-dark-src="../assets/icons/logo.png">
         </div>
         <nav class="menu-container">
             <div class="menu-item home-item">
                 <a href="../index.html">
                     <img src="../assets/icons/home.png" alt="home">
-                    <span>Home</span>
+                    <span data-i18n="home">Home</span>
                 </a>
             </div>
             <div class="menu-item shop-item">
                 <a href="catalog.html">
                     <img src="../assets/icons/shop.png" alt="shop">
-                    <span>Shop</span>
+                    <span data-i18n="shop">Shop</span>
                 </a>
             </div>
             <div class="menu-item">
                 <a href="favorites.html">
                     <img src="../assets/icons/heart.png" alt="favorites">
-                    <span>Favorites</span>
+                    <span data-i18n="favorites">Favorites</span>
                 </a>
             </div>
             <div class="menu-item">
                 <div class="active-indicator"></div>
                 <a href="feedback.html">
                     <img src="../assets/icons/blog.png" alt="reviews">
-                    <span>Reviews</span>
+                    <span data-i18n="reviews">Reviews</span>
                 </a>
             </div>
             <div class="menu-item">
                 <a href="cart.html">
                     <img src="../assets/icons/cart.png" alt="cart">
-                    <span>Cart</span>
+                    <span data-i18n="cart">Cart</span>
                 </a>
             </div>
             <div class="menu-item" id="adminMenuItem" style="display: none;">
                 <a href="admin.html">
                     <img src="../assets/icons/admin.png" alt="admin">
-                    <span>Admin</span>
+                    <span data-i18n="admin">Admin</span>
                 </a>
             </div>
         </nav>
@@ -56,28 +57,27 @@
 
     <div class="main-content">
         <div class="catalog-header">
-            <h1>⭐ Отзывы покупателей</h1>
-            <p>Поделитесь своим мнением о товарах</p>
-            <a href="catalog.html" class="back-link">← Вернуться в каталог</a>
+            <h1 data-i18n="reviews-title">⭐ Отзывы покупателей</h1>
+            <p data-i18n="reviews-subtitle">Поделитесь своим мнением о товарах</p>
+            <a href="catalog.html" class="back-link" data-i18n="back-to-catalog">← Вернуться в каталог</a>
         </div>
 
         <div class="feedback-container">
             <div class="feedback-form-container" id="feedbackFormContainer">
-                <h2>📝 Оставить отзыв</h2>
+                <h2 id="leaveReviewTitle" data-i18n="leave-review">📝 Оставить отзыв</h2>
                 <div id="authRequired" class="auth-required" style="display: none;">
-                    <p>🔒 Для добавления отзыва необходимо <a href="register.html">войти в аккаунт</a></p>
+                    <p id="authRequiredText"><span data-i18n="auth-required-login">🔒 Для добавления отзыва необходимо</span> <a href="register.html" id="loginLink" data-i18n="login-link">войти в аккаунт</a></p>
                 </div>
                 <div id="feedbackForm" style="display: none;">
                     <div class="form-group">
-                        <label class="required-label">Выберите товар</label>
+                        <label class="required-label" data-i18n="select-product">Выберите товар</label>
                         <select id="productSelect" class="product-select">
-                            <option value="">-- Выберите товар --</option>
+                            <option value="" data-i18n="select-product">-- Выберите товар --</option>
                         </select>
                         <div class="error-message" id="productError"></div>
                     </div>
-
                     <div class="form-group">
-                        <label class="required-label">Рейтинг</label>
+                        <label class="required-label" data-i18n="rating">Рейтинг</label>
                         <div class="rating-input">
                             <span class="rating-star" data-rating="1">☆</span>
                             <span class="rating-star" data-rating="2">☆</span>
@@ -88,42 +88,36 @@
                         <input type="hidden" id="ratingValue" value="0">
                         <div class="error-message" id="ratingError"></div>
                     </div>
-
                     <div class="form-group">
-                        <label class="required-label">Ваш отзыв</label>
+                        <label class="required-label" data-i18n="your-review">Ваш отзыв</label>
                         <textarea id="reviewText" rows="5" placeholder="Расскажите о своем опыте использования товара..."></textarea>
                         <div class="char-counter">
-                            <span id="charCount">0</span> / <span id="minCharCount">50</span> символов (минимум)
+                            <span id="charCount">0</span> / <span id="minCharCount">50</span> <span data-i18n="char-min">символов (минимум)</span>
                         </div>
                         <div class="error-message" id="reviewError"></div>
                     </div>
-
-                    <button type="button" class="submit-btn" id="submitReviewBtn" disabled>Отправить отзыв</button>
+                    <button type="button" class="submit-btn" id="submitReviewBtn" disabled data-i18n="submit-review">Отправить отзыв</button>
                 </div>
             </div>
-
             <div class="reviews-list">
-                <h2>📖 Отзывы покупателей</h2>
+                <h2 id="customerReviewsTitle" data-i18n="customer-reviews">📖 Отзывы покупателей</h2>
                 <div class="reviews-filter">
                     <select id="filterProduct" class="filter-select">
-                        <option value="all">Все товары</option>
                     </select>
                     <select id="filterRating" class="filter-select">
-                        <option value="all">Все рейтинги</option>
-                        <option value="5">★★★★★ (5)</option>
-                        <option value="4">★★★★☆ (4+)</option>
-                        <option value="3">★★★☆☆ (3+)</option>
-                        <option value="2">★★☆☆☆ (2+)</option>
-                        <option value="1">★☆☆☆☆ (1+)</option>
                     </select>
                 </div>
                 <div id="reviewsContainer" class="reviews-container">
-                    <div class="loading">Загрузка отзывов...</div>
+                    <div class="loading" data-i18n="loading">Загрузка отзывов...</div>
                 </div>
             </div>
         </div>
     </div>
 
+    <script src="../js/utils.js"></script>
+    <script src="../js/translations.js"></script>
+    <script src="../js/theme.js"></script>
+    <script src="../js/features.js"></script>
     <script src="../js/feedback.js"></script>
 </body>
 </html>

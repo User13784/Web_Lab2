@@ -1,5 +1,113 @@
 const API_URL = 'http://localhost:3000';
+const USER_STORAGE_KEY = 'currentUser';
 
+function saveUserToStorage(user) {
+    localStorage.setItem(USER_STORAGE_KEY, JSON.stringify({
+        id: user.id,
+        nickname: user.nickname,
+        role: user.role,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        phone: user.phone,
+        birthDate: user.birthDate,
+        patronymic: user.patronymic || '',
+        theme: currentTheme || 'light',
+        language: currentLang || 'en'
+    }));
+}
+
+function getUserFromStorage() {
+    const saved = localStorage.getItem(USER_STORAGE_KEY);
+    return saved ? JSON.parse(saved) : null;
+}
+
+function logout() {
+    localStorage.removeItem(USER_STORAGE_KEY);
+    if (typeof updateAuthUI === 'function') {
+        updateAuthUI();
+    }
+    window.location.reload();
+}
+
+function updateAuthUI() {
+    const savedUser = getUserFromStorage();
+    const userIconSpan = document.querySelector('.user-icon span');
+    const userIcon = document.querySelector('.user-icon');
+    
+    if (savedUser && userIconSpan) {
+        userIconSpan.textContent = savedUser.nickname || savedUser.firstName;
+        
+        let logoutBtn = document.querySelector('.user-icon .logout-btn');
+        if (!logoutBtn) {
+            const logoutButton = document.createElement('button');
+            logoutButton.className = 'logout-btn';
+            logoutButton.innerHTML = '🚪';
+            logoutButton.title = 'Выйти';
+            logoutButton.style.cssText = `
+                margin-left: 5px;
+                background: none;
+                border: none;
+                cursor: pointer;
+                font-size: 16px;
+                padding: 4px 8px;
+                border-radius: 50%;
+                transition: all 0.3s ease;
+            `;
+            logoutButton.onclick = (e) => {
+                e.stopPropagation();
+                logout();
+            };
+            
+            userIcon.appendChild(logoutButton);
+        }
+    } else if (userIcon) {
+        const logoutBtn = userIcon.querySelector('.logout-btn');
+        if (logoutBtn) logoutBtn.remove();
+    }
+}
+
+async function loginUser(email, password) {
+    try {
+        const response = await fetch(`${API_URL}/users?email=${email}`);
+        const users = await response.json();
+        
+        if (users.length === 0) {
+            ToastManager.show('Пользователь с таким email не найден', 'error');
+            return false;
+        }
+        
+        const user = users[0];
+        if (user.password !== password) {
+            ToastManager.show('Неверный пароль', 'error');
+            return false;
+        }
+        
+        saveUserToStorage(user);
+        
+        const savedTheme = localStorage.getItem(`${user.id}_theme`);
+        const savedLang = localStorage.getItem(`${user.id}_lang`);
+        
+        if (savedTheme) applyTheme(savedTheme);
+        if (savedLang) translatePage(savedLang);
+        
+        ToastManager.show(`Добро пожаловать, ${user.firstName}!`, 'success');
+        
+        setTimeout(() => {
+            if (user.role === 'admin') {
+                window.location.href = 'pages/admin.html';
+            } else {
+                window.location.href = 'pages/catalog.html';
+            }
+        }, 1500);
+        
+        return true;
+    } catch (error) {
+        console.error('Ошибка авторизации:', error);
+        ToastManager.show('Ошибка сервера', 'error');
+        return false;
+    }
+}
 const TOP_PASSWORDS = [
     'password', '123456', '123456789', 'qwerty', 'password123', '12345678', '111111',
     '12345', '1234567890', 'qwerty123', 'abc123', 'admin', 'iloveyou', 'welcome',
@@ -462,51 +570,6 @@ function validateRegistrationFormSync() {
     return isValid;
 }
 
-async function loginUser(email, password) {
-    try {
-        const response = await fetch(`${API_URL}/users?email=${email}`);
-        const users = await response.json();
-        
-        if (users.length === 0) {
-            showMessage('Пользователь с таким email не найден', 'error');
-            return false;
-        }
-        
-        const user = users[0];
-        if (user.password !== password) {
-            showMessage('Неверный пароль', 'error');
-            return false;
-        }
-        
-        localStorage.setItem('currentUser', JSON.stringify({
-            id: user.id,
-            nickname: user.nickname,
-            role: user.role,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            email: user.email,
-            phone: user.phone
-        }));
-        
-        currentUser = user;
-        showMessage(`Добро пожаловать, ${user.firstName}!`, 'success');
-        
-        setTimeout(() => {
-            if (user.role === 'admin') {
-                window.location.href = 'admin.html';
-            } else {
-                window.location.href = 'catalog.html';
-            }
-        }, 1500);
-        
-        return true;
-    } catch (error) {
-        console.error('Ошибка авторизации:', error);
-        showMessage('Ошибка сервера', 'error');
-        return false;
-    }
-}
-
 async function registerUser(userData) {
     try {
         const isEmailUnique = await checkEmailUnique(userData.email);
@@ -892,10 +955,23 @@ function checkAdminMenu() {
     }
 }
 
+function setupProfileLogout() {
+    const observer = new MutationObserver(function(mutations) {
+        const userIcon = document.querySelector('.user-icon');
+        if (userIcon) {
+            updateAuthUI();
+            observer.disconnect();
+        }
+    });
+    
+    observer.observe(document.body, { childList: true, subtree: true });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     console.log('Страница регистрации загружена');
     
     checkAdminMenu();
+    setupProfileLogout();
     
     const loginForm = document.getElementById('loginFormContent');
     const registerForm = document.getElementById('registerFormContent');
@@ -950,3 +1026,5 @@ window.togglePasswordVisibility = togglePasswordVisibility;
 window.generateNickname = generateNickname;
 window.showLoginForm = showLoginForm;
 window.showRegisterForm = showRegisterForm;
+window.logout = logout;
+window.updateAuthUI = updateAuthUI;

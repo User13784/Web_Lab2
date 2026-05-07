@@ -1,5 +1,47 @@
 const API_URL = 'http://localhost:3000';
 
+function getCurrentLanguage() {
+    return localStorage.getItem('language') || 'en';
+}
+
+function getTranslatedValue(obj, lang = null) {
+    const currentLang = lang || getCurrentLanguage();
+    
+    if (!obj) return '';
+    if (typeof obj === 'string') return obj;
+    if (typeof obj === 'object' && obj[currentLang]) return obj[currentLang];
+    if (typeof obj === 'object' && obj['en']) return obj['en'];
+    
+    return String(obj);
+}
+
+function getTranslatedCategory(categoryKey, lang = null) {
+    const currentLang = lang || getCurrentLanguage();
+    
+    const categories = {
+        'en': {
+            'sofa': 'Sofas',
+            'living': 'Living Room',
+            'kitchen': 'Kitchen',
+            'bedroom': 'Bedroom',
+            'bathroom': 'Bathroom',
+            'decor': 'Decor',
+            'ceramics': 'Ceramics'
+        },
+        'ru': {
+            'sofa': 'Диваны',
+            'living': 'Гостиная',
+            'kitchen': 'Кухня',
+            'bedroom': 'Спальня',
+            'bathroom': 'Ванная',
+            'decor': 'Декор',
+            'ceramics': 'Керамика'
+        }
+    };
+    
+    return categories[currentLang]?.[categoryKey] || categoryKey;
+}
+
 const api = {
     async getProducts(params = {}) {
         const queryParams = new URLSearchParams();
@@ -183,8 +225,6 @@ async function loadCategories() {
         
         const uniqueCategories = [...new Set(products.map(product => product.category))];
         
-        console.log('Уникальные категории из Set:', uniqueCategories);
-        
         uniqueCategories.sort();
         
         const categoryContainer = document.getElementById('categoryFilter');
@@ -192,10 +232,13 @@ async function loadCategories() {
         
         categoryContainer.innerHTML = '';
         
+        const currentLang = getCurrentLanguage();
+        
+        // Кнопка "Все" / "All"
         const allButton = document.createElement('button');
         allButton.className = `category-btn ${state.filters.category === 'all' ? 'active' : ''}`;
         allButton.dataset.category = 'all';
-        allButton.textContent = 'Все';
+        allButton.textContent = currentLang === 'ru' ? 'Все' : 'All';
         allButton.addEventListener('click', () => {
             document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
             allButton.classList.add('active');
@@ -204,12 +247,13 @@ async function loadCategories() {
         });
         categoryContainer.appendChild(allButton);
         
+        // Кнопки категорий
         uniqueCategories.forEach(category => {
             const button = document.createElement('button');
             button.className = `category-btn ${state.filters.category === category ? 'active' : ''}`;
             button.dataset.category = category;
             
-            const categoryLabel = getCategoryLabel(category);
+            const categoryLabel = getTranslatedCategory(category, currentLang);
             button.textContent = categoryLabel;
             
             button.addEventListener('click', () => {
@@ -228,19 +272,6 @@ async function loadCategories() {
         console.error('Ошибка загрузки категорий:', error);
         showMessage('Ошибка загрузки категорий', true);
     }
-}
-
-function getCategoryLabel(categoryValue) {
-    const categoriesMap = {
-        'sofa': 'Диваны',
-        'living': 'Гостиная',
-        'kitchen': 'Кухня',
-        'bedroom': 'Спальня',
-        'bathroom': 'Ванная',
-        'decor': 'Декор',
-        'ceramics': 'Керамика'
-    };
-    return categoriesMap[categoryValue] || categoryValue;
 }
 
 function generateStars(rating) {
@@ -327,15 +358,18 @@ async function toggleFavorite(productId) {
         if (!product) return;
         
         const newFavoriteStatus = !product.isFavorite;
+        const currentLang = getCurrentLanguage();
         
         if (newFavoriteStatus) {
             await api.addToFavorites(productId, product);
-            showMessage(`✅ "${product.name}" добавлен в избранное`);
+            const productName = getTranslatedValue(product.name, currentLang);
+            showMessage(`✅ "${productName}" добавлен в избранное`);
         } else {
             const favorites = await api.getFavorites();
             const favItem = favorites.find(f => f.productId === productId);
             if (favItem) await api.removeFromFavorites(favItem.id);
-            showMessage(`❌ "${product.name}" удален из избранного`);
+            const productName = getTranslatedValue(product.name, currentLang);
+            showMessage(`❌ "${productName}" удален из избранного`);
         }
         
         await api.updateProduct(productId, { isFavorite: newFavoriteStatus });
@@ -364,7 +398,9 @@ async function addToCart(productId) {
             quantity: 1
         });
         
-        showMessage(`✅ "${product.name}" добавлен в корзину`);
+        const currentLang = getCurrentLanguage();
+        const productName = getTranslatedValue(product.name, currentLang);
+        showMessage(`✅ "${productName}" добавлен в корзину`);
     } catch (error) {
         console.error('Ошибка:', error);
         showMessage('Ошибка при добавлении в корзину', true);
@@ -387,33 +423,44 @@ function renderProducts() {
         return;
     }
     
-    container.innerHTML = state.products.map(product => `
-        <article class="catalog-card" data-id="${product.id}">
-            <div class="card-image">
-                <img src="${product.image.startsWith('assets/') ? '../' + product.image : product.image}" alt="${product.name}" onerror="this.src='../assets/images/chair.png'">
-                <button class="favorite-btn ${product.isFavorite ? 'active' : ''}" onclick="toggleFavorite(${product.id})">
-                    ${product.isFavorite ? '❤️' : '🤍'}
-                </button>
-            </div>
-            <div class="card-info">
-                <h3 class="card-title">${escapeHtml(product.name)}</h3>
-                <div class="card-category">${getCategoryLabel(product.category)}</div>
-                <div class="card-price">£${product.price.toFixed(2)}</div>
-                <div class="card-rating">${generateStars(product.rating)}</div>
-                <span class="card-stock ${product.inStock ? 'in-stock' : 'out-stock'}">
-                    ${product.inStock ? '✓ В наличии' : '✗ Нет в наличии'}
-                </span>
-                <p class="card-description">${product.description ? product.description.substring(0, 60) : ''}${product.description && product.description.length > 60 ? '...' : ''}</p>
-                <button class="add-to-cart-btn" onclick="addToCart(${product.id})" ${!product.inStock ? 'disabled' : ''}>
-                    🛒 В корзину
-                </button>
-            </div>
-        </article>
-    `).join('');
+    const currentLang = getCurrentLanguage();
+    
+    container.innerHTML = state.products.map(product => {
+        const productName = getTranslatedValue(product.name, currentLang);
+        const productDescription = getTranslatedValue(product.description, currentLang);
+        const categoryName = getTranslatedCategory(product.category, currentLang);
+        const inStockText = product.inStock ? (currentLang === 'ru' ? '✓ В наличии' : '✓ In stock') : (currentLang === 'ru' ? '✗ Нет в наличии' : '✗ Out of stock');
+        const addToCartText = currentLang === 'ru' ? '🛒 В корзину' : '🛒 Add to cart';
+        
+        return `
+            <article class="catalog-card" data-id="${product.id}">
+                <div class="card-image">
+                    <img src="${product.image.startsWith('assets/') ? '../' + product.image : product.image}" 
+                         alt="${escapeHtml(productName)}" onerror="this.src='../assets/images/chair.png'">
+                    <button class="favorite-btn ${product.isFavorite ? 'active' : ''}" onclick="toggleFavorite(${product.id})">
+                        ${product.isFavorite ? '❤️' : '🤍'}
+                    </button>
+                </div>
+                <div class="card-info">
+                    <h3 class="card-title">${escapeHtml(productName)}</h3>
+                    <div class="card-category">${categoryName}</div>
+                    <div class="card-price">£${product.price.toFixed(2)}</div>
+                    <div class="card-rating">${generateStars(product.rating)}</div>
+                    <span class="card-stock ${product.inStock ? 'in-stock' : 'out-stock'}">
+                        ${inStockText}
+                    </span>
+                    <p class="card-description">${productDescription ? productDescription.substring(0, 60) : ''}${productDescription && productDescription.length > 60 ? '...' : ''}</p>
+                    <button class="add-to-cart-btn" onclick="addToCart(${product.id})" ${!product.inStock ? 'disabled' : ''}>
+                        ${addToCartText}
+                    </button>
+                </div>
+            </article>
+        `;
+    }).join('');
     
     const statsEl = document.getElementById('stats');
     if (statsEl) {
-        statsEl.innerHTML = `📊 Найдено: ${state.totalProducts} товаров | Страница ${state.currentPage}`;
+        statsEl.innerHTML = `${currentLang === 'ru' ? '📊 Найдено:' : '📊 Found:'} ${state.totalProducts} ${currentLang === 'ru' ? 'товаров' : 'products'} | ${currentLang === 'ru' ? 'Страница' : 'Page'} ${state.currentPage}`;
     }
 }
 
@@ -484,10 +531,12 @@ async function applyMap() {
     state.products = newPrices;
     state.totalProducts = newPrices.length;
     renderProducts();
-    showMessage('✅ map() - Цены увеличены на 10% (только для просмотра)');
+    const currentLang = getCurrentLanguage();
+    showMessage(currentLang === 'ru' ? '✅ map() - Цены увеличены на 10% (только для просмотра)' : '✅ map() - Prices increased by 10% (view only)');
     setTimeout(() => { 
         loadProducts(); 
-        showMessage('🔄 Каталог восстановлен к исходному состоянию');
+        const resetMsg = currentLang === 'ru' ? '🔄 Каталог восстановлен к исходному состоянию' : '🔄 Catalog restored to original state';
+        showMessage(resetMsg);
     }, 5000);
 }
 
@@ -497,36 +546,60 @@ async function applyFilter() {
     state.products = inStockOnly;
     state.totalProducts = inStockOnly.length;
     renderProducts();
-    showMessage(`✅ filter() - Показано только ${inStockOnly.length} товаров в наличии`);
+    const currentLang = getCurrentLanguage();
+    showMessage(currentLang === 'ru' ? `✅ filter() - Показано только ${inStockOnly.length} товаров в наличии` : `✅ filter() - Showing only ${inStockOnly.length} products in stock`);
     setTimeout(() => { 
         loadProducts(); 
-        showMessage('🔄 Каталог восстановлен к исходному состоянию');
+        const resetMsg = currentLang === 'ru' ? '🔄 Каталог восстановлен к исходному состоянию' : '🔄 Catalog restored to original state';
+        showMessage(resetMsg);
     }, 5000);
 }
 
 async function applyReduce() {
     await loadAllProducts();
     const totalValue = allProductsCache.reduce((sum, product) => sum + product.price, 0);
-    showMessage(`💰 reduce() - Общая стоимость всех товаров: £${totalValue.toFixed(2)}`);
+    const currentLang = getCurrentLanguage();
+    showMessage(currentLang === 'ru' ? `💰 reduce() - Общая стоимость всех товаров: £${totalValue.toFixed(2)}` : `💰 reduce() - Total value of all products: £${totalValue.toFixed(2)}`);
 }
 
 async function applyIndexOf() {
     await loadAllProducts();
-    const userInput = prompt("🔍 Введите название товара для поиска:", "Элитный диван");
+    const currentLang = getCurrentLanguage();
+    const promptMsg = currentLang === 'ru' ? "🔍 Введите название товара для поиска:" : "🔍 Enter product name to search:";
+    const defaultProduct = currentLang === 'ru' ? "Элитный диван" : "Luxury Sofa";
+    const userInput = prompt(promptMsg, defaultProduct);
     if (!userInput || userInput.trim() === "") {
-        showMessage("⚠️ Поиск отменён или введено пустое значение");
+        const cancelMsg = currentLang === 'ru' ? "⚠️ Поиск отменён или введено пустое значение" : "⚠️ Search cancelled or empty value";
+        showMessage(cancelMsg);
         return;
     }
     const searchName = userInput.trim();
-    const index = allProductsCache.findIndex(p => p.name.toLowerCase() === searchName.toLowerCase());
+    const index = allProductsCache.findIndex(p => {
+        const pName = getTranslatedValue(p.name, currentLang);
+        return pName.toLowerCase() === searchName.toLowerCase();
+    });
     if (index !== -1) {
-        showMessage(`🔍 indexOf() - Товар "${allProductsCache[index].name}" найден на позиции ${index + 1} (индекс ${index})`);
+        const productName = getTranslatedValue(allProductsCache[index].name, currentLang);
+        const foundMsg = currentLang === 'ru' 
+            ? `🔍 indexOf() - Товар "${productName}" найден на позиции ${index + 1} (индекс ${index})`
+            : `🔍 indexOf() - Product "${productName}" found at position ${index + 1} (index ${index})`;
+        showMessage(foundMsg);
     } else {
-        const similar = allProductsCache.filter(p => p.name.toLowerCase().includes(searchName.toLowerCase()));
+        const similar = allProductsCache.filter(p => {
+            const pName = getTranslatedValue(p.name, currentLang);
+            return pName.toLowerCase().includes(searchName.toLowerCase());
+        });
         if (similar.length > 0) {
-            showMessage(`❌ Товар "${searchName}" не найден. Возможно, вы искали: ${similar.map(p => p.name).join(", ")}`);
+            const similarNames = similar.map(p => getTranslatedValue(p.name, currentLang)).join(", ");
+            const notFoundMsg = currentLang === 'ru'
+                ? `❌ Товар "${searchName}" не найден. Возможно, вы искали: ${similarNames}`
+                : `❌ Product "${searchName}" not found. Maybe you meant: ${similarNames}`;
+            showMessage(notFoundMsg);
         } else {
-            showMessage(`❌ indexOf() - Товар "${searchName}" не найден в каталоге`);
+            const notFoundMsg = currentLang === 'ru'
+                ? `❌ indexOf() - Товар "${searchName}" не найден в каталоге`
+                : `❌ indexOf() - Product "${searchName}" not found in catalog`;
+            showMessage(notFoundMsg);
         }
     }
 }
@@ -534,33 +607,49 @@ async function applyIndexOf() {
 async function applyFind() {
     await loadAllProducts();
     const expensiveProduct = allProductsCache.find(p => p.price > 800);
+    const currentLang = getCurrentLanguage();
     if (expensiveProduct) {
-        showMessage(`🔍 find() - Найден дорогой товар: "${expensiveProduct.name}" за £${expensiveProduct.price}`);
+        const productName = getTranslatedValue(expensiveProduct.name, currentLang);
+        showMessage(currentLang === 'ru' 
+            ? `🔍 find() - Найден дорогой товар: "${productName}" за £${expensiveProduct.price}`
+            : `🔍 find() - Found expensive product: "${productName}" for £${expensiveProduct.price}`);
     } else {
-        showMessage('🔍 find() - Товаров дороже £800 не найдено');
+        showMessage(currentLang === 'ru' ? '🔍 find() - Товаров дороже £800 не найдено' : '🔍 find() - No products over £800 found');
     }
 }
 
 async function applySome() {
     await loadAllProducts();
     const hasExpensive = allProductsCache.some(p => p.price > 500);
-    showMessage(`❓ some() - ${hasExpensive ? 'Есть' : 'Нет'} товары дороже £500`);
+    const currentLang = getCurrentLanguage();
+    showMessage(currentLang === 'ru' 
+        ? `❓ some() - ${hasExpensive ? 'Есть' : 'Нет'} товары дороже £500`
+        : `❓ some() - ${hasExpensive ? 'There are' : 'There are no'} products over £500`);
 }
 
 async function applyEvery() {
     await loadAllProducts();
     const allInStock = allProductsCache.every(p => p.inStock);
-    showMessage(`❓ every() - ${allInStock ? 'Все' : 'Не все'} товары в наличии`);
+    const currentLang = getCurrentLanguage();
+    showMessage(currentLang === 'ru' 
+        ? `❓ every() - ${allInStock ? 'Все' : 'Не все'} товары в наличии`
+        : `❓ every() - ${allInStock ? 'All' : 'Not all'} products are in stock`);
 }
 
 async function applyForEach() {
     await loadAllProducts();
     let namesList = '';
+    const currentLang = getCurrentLanguage();
     allProductsCache.forEach((p, index) => {
-        namesList += `${index + 1}. ${p.name}\n`;
+        const pName = getTranslatedValue(p.name, currentLang);
+        namesList += `${index + 1}. ${pName}\n`;
     });
-    showMessage(`📝 forEach() - Список товаров (${allProductsCache.length} шт.)`);
-    alert(`Список всех товаров (${allProductsCache.length} шт.):\n\n${namesList}`);
+    const titleMsg = currentLang === 'ru' 
+        ? `📝 forEach() - Список товаров (${allProductsCache.length} шт.)`
+        : `📝 forEach() - List of products (${allProductsCache.length} items)`;
+    showMessage(titleMsg);
+    const alertTitle = currentLang === 'ru' ? 'Список всех товаров' : 'List of all products';
+    alert(`${alertTitle} (${allProductsCache.length} ${currentLang === 'ru' ? 'шт.' : 'items'}):\n\n${namesList}`);
 }
 
 async function applySlice() {
@@ -569,24 +658,65 @@ async function applySlice() {
     state.products = top3;
     state.totalProducts = top3.length;
     renderProducts();
-    showMessage('🎯 slice() - Показаны первые 3 товара');
+    const currentLang = getCurrentLanguage();
+    showMessage(currentLang === 'ru' ? '🎯 slice() - Показаны первые 3 товара' : '🎯 slice() - Showing first 3 products');
     setTimeout(() => { 
         loadProducts(); 
-        showMessage('🔄 Каталог восстановлен к исходному состоянию');
+        const resetMsg = currentLang === 'ru' ? '🔄 Каталог восстановлен к исходному состоянию' : '🔄 Catalog restored to original state';
+        showMessage(resetMsg);
     }, 5000);
 }
 
 async function applyValues() {
     await loadAllProducts();
     const valuesArray = [...allProductsCache.values()];
-    const productNames = valuesArray.map(p => p.name).join(', ');
-    showMessage(`💎 values() - Всего товаров: ${valuesArray.length}`);
-    alert(`Все товары в каталоге (${valuesArray.length} шт.):\n\n${productNames}`);
+    const currentLang = getCurrentLanguage();
+    const productNames = valuesArray.map(p => getTranslatedValue(p.name, currentLang)).join(', ');
+    showMessage(currentLang === 'ru' ? `💎 values() - Всего товаров: ${valuesArray.length}` : `💎 values() - Total products: ${valuesArray.length}`);
+    const alertTitle = currentLang === 'ru' ? 'Все товары в каталоге' : 'All products in catalog';
+    alert(`${alertTitle} (${valuesArray.length} ${currentLang === 'ru' ? 'шт.' : 'items'}):\n\n${productNames}`);
 }
 
 function resetCatalog() {
     loadProducts();
-    showMessage('🔄 Каталог сброшен к исходному состоянию');
+    const currentLang = getCurrentLanguage();
+    showMessage(currentLang === 'ru' ? '🔄 Каталог сброшен к исходному состоянию' : '🔄 Catalog reset to original state');
+}
+
+function translateMethodButtons() {
+    const currentLang = getCurrentLanguage();
+    
+    const methodsTitle = document.querySelector('.methods-title');
+    if (methodsTitle) {
+        methodsTitle.textContent = currentLang === 'ru' 
+            ? '📊 Методы работы с массивами JavaScript:' 
+            : '📊 JavaScript Array Methods:';
+    }
+    
+    const translations = {
+        map: { ru: 'map() - Увеличить цены на 10%', en: 'map() - Increase prices by 10%' },
+        filter: { ru: 'filter() - Только в наличии', en: 'filter() - In stock only' },
+        reduce: { ru: 'reduce() - Показать общую стоимость', en: 'reduce() - Show total cost' },
+        indexOf: { ru: 'indexOf() - Найти позицию товара', en: 'indexOf() - Find product position' },
+        find: { ru: 'find() - Найти дорогой товар', en: 'find() - Find expensive product' },
+        some: { ru: 'some() - Есть товары > £500?', en: 'some() - Products > £500?' },
+        every: { ru: 'every() - Все товары в наличии?', en: 'every() - All products in stock?' },
+        forEach: { ru: 'forEach() - Список названий', en: 'forEach() - List of names' },
+        slice: { ru: 'slice() - Топ 3 товара', en: 'slice() - Top 3 products' },
+        values: { ru: 'values() - Все значения массива', en: 'values() - All array values' }
+    };
+    
+    Object.keys(translations).forEach(method => {
+        const btn = document.querySelector(`.method-btn[data-method="${method}"]`);
+        if (btn) {
+            btn.textContent = translations[method][currentLang === 'ru' ? 'ru' : 'en'];
+        }
+    });
+    
+    const resetBtn = document.getElementById('resetCatalogBtn');
+    if (resetBtn) {
+        resetBtn.textContent = currentLang === 'ru' ? '🔄 Сбросить каталог' : '🔄 Reset catalog';
+    }
 }
 
 function initMethodButtons() {
@@ -622,13 +752,16 @@ function initMethodButtons() {
     if (methodButtonsContainer && !document.getElementById('resetCatalogBtn')) {
         const resetBtn = document.createElement('button');
         resetBtn.id = 'resetCatalogBtn';
-        resetBtn.textContent = '🔄 Сбросить каталог';
         resetBtn.className = 'method-btn';
+        const currentLang = getCurrentLanguage();
+        resetBtn.textContent = currentLang === 'ru' ? '🔄 Сбросить каталог' : '🔄 Reset catalog';
         resetBtn.style.background = '#264A51';
         resetBtn.style.color = 'white';
         resetBtn.addEventListener('click', resetCatalog);
         methodButtonsContainer.appendChild(resetBtn);
     }
+    
+    translateMethodButtons();
 }
 
 function initFilters() {
@@ -661,6 +794,16 @@ function initFilters() {
     if (stockSelect) stockSelect.addEventListener('change', (e) => { state.filters.inStock = e.target.value; applyFilters(); });
 }
 
+window.addEventListener('storage', (event) => {
+    if (event.key === 'language') {
+        setTimeout(() => {
+            translateMethodButtons();
+            loadCategories();
+            loadProducts();
+        }, 50);
+    }
+});
+
 document.addEventListener('DOMContentLoaded', async () => {
     console.log('Каталог загружен, инициализация...');
     
@@ -671,13 +814,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     
     await loadCategories();
     await loadProducts();
+    
+    setTimeout(() => {
+        translateMethodButtons();
+    }, 100);
 });
 
 window.toggleFavorite = toggleFavorite;
 window.addToCart = addToCart;
 window.changePage = changePage;
 
-// Открытие модального окна с деталями товара при клике на карточку
 document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
         const cards = document.querySelectorAll('.catalog-card');

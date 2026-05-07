@@ -1,6 +1,21 @@
 const API_URL = 'http://localhost:3000';
 let currentUser = null;
 
+function getCurrentLanguage() {
+    return localStorage.getItem('language') || 'en';
+}
+
+function getTranslatedValue(obj, lang = null) {
+    const currentLang = lang || getCurrentLanguage();
+    
+    if (!obj) return '';
+    if (typeof obj === 'string') return obj;
+    if (typeof obj === 'object' && obj[currentLang]) return obj[currentLang];
+    if (typeof obj === 'object' && obj['en']) return obj['en'];
+    
+    return String(obj);
+}
+
 function showMessage(message, type = 'info') {
     const existingMsg = document.querySelector('.message-popup');
     if (existingMsg) existingMsg.remove();
@@ -57,19 +72,27 @@ async function loadProductsForSelect() {
                     availableProducts = products.filter(p => purchasedProductIds.has(p.id));
                 } else {
                     availableProducts = [];
-                    showMessage('Вы еще не совершали покупок. Чтобы оставить отзыв, сначала купите товар.', 'error');
+                    const msg = getCurrentLanguage() === 'ru' 
+                        ? 'Вы еще не совершали покупок. Чтобы оставить отзыв, сначала купите товар.'
+                        : 'You haven\'t made any purchases yet. To leave a review, please buy a product first.';
+                    showMessage(msg, 'error');
                 }
             }
             
             if (availableProducts.length === 0) {
-                select.innerHTML = '<option value="">-- Нет доступных товаров для отзыва --</option>';
+                const msg = getCurrentLanguage() === 'ru'
+                    ? '-- Нет доступных товаров для отзыва --'
+                    : '-- No products available for review --';
+                select.innerHTML = `<option value="">${msg}</option>`;
                 const submitBtn = document.getElementById('submitReviewBtn');
                 if (submitBtn) submitBtn.disabled = true;
             } else {
+                const currentLang = getCurrentLanguage();
                 availableProducts.forEach(product => {
                     const option = document.createElement('option');
                     option.value = product.id;
-                    option.textContent = `${product.name} - £${product.price}`;
+                    const productName = getTranslatedValue(product.name, currentLang);
+                    option.textContent = `${productName} - £${product.price}`;
                     select.appendChild(option);
                 });
             }
@@ -86,11 +109,20 @@ async function loadProductsForFilter() {
         
         const filterSelect = document.getElementById('filterProduct');
         if (filterSelect) {
-            filterSelect.innerHTML = '<option value="all">Все товары</option>';
+            const currentLang = getCurrentLanguage();
+            
+            filterSelect.innerHTML = '';
+            
+            const allOption = document.createElement('option');
+            allOption.value = 'all';
+            allOption.textContent = currentLang === 'ru' ? 'Все товары' : 'All products';
+            filterSelect.appendChild(allOption);
+            
             products.forEach(product => {
                 const option = document.createElement('option');
                 option.value = product.id;
-                option.textContent = product.name;
+                const productName = getTranslatedValue(product.name, currentLang);
+                option.textContent = productName;
                 filterSelect.appendChild(option);
             });
         }
@@ -99,10 +131,52 @@ async function loadProductsForFilter() {
     }
 }
 
+function translateRatingFilter() {
+    const ratingSelect = document.getElementById('filterRating');
+    if (!ratingSelect) return;
+    
+    const currentLang = getCurrentLanguage();
+    
+    const ratingOptions = {
+        'all': { ru: 'Все рейтинги', en: 'All ratings' },
+        '5': { ru: '★★★★★ (5)', en: '★★★★★ (5)' },
+        '4': { ru: '★★★★☆ (4+)', en: '★★★★☆ (4+)' },
+        '3': { ru: '★★★☆☆ (3+)', en: '★★★☆☆ (3+)' },
+        '2': { ru: '★★☆☆☆ (2+)', en: '★★☆☆☆ (2+)' },
+        '1': { ru: '★☆☆☆☆ (1+)', en: '★☆☆☆☆ (1+)' }
+    };
+    
+    const defaultValue = 'all';
+    
+    ratingSelect.innerHTML = '';
+    
+    Object.keys(ratingOptions).forEach(value => {
+        const option = document.createElement('option');
+        option.value = value;
+        option.textContent = ratingOptions[value][currentLang === 'ru' ? 'ru' : 'en'];
+        ratingSelect.appendChild(option);
+    });
+    
+    ratingSelect.value = defaultValue;
+}
+
+function resetRatingFilterToAll() {
+    const ratingSelect = document.getElementById('filterRating');
+    if (ratingSelect) {
+        ratingSelect.value = 'all';
+    }
+}
+
 async function loadReviews() {
     try {
-        const productFilter = document.getElementById('filterProduct')?.value || 'all';
-        const ratingFilter = document.getElementById('filterRating')?.value || 'all';
+        let productFilter = document.getElementById('filterProduct')?.value || 'all';
+        let ratingFilter = document.getElementById('filterRating')?.value || 'all';
+        
+        if (!ratingFilter || ratingFilter === 'undefined') {
+            ratingFilter = 'all';
+            const ratingSelect = document.getElementById('filterRating');
+            if (ratingSelect) ratingSelect.value = 'all';
+        }
         
         const response = await fetch(`${API_URL}/feedback`);
         let reviews = await response.json();
@@ -122,34 +196,45 @@ async function loadReviews() {
         if (!container) return;
         
         if (reviews.length === 0) {
-            container.innerHTML = '<div class="no-reviews">💬 Пока нет отзывов. Будьте первым!</div>';
+            const currentLang = getCurrentLanguage();
+            const noReviewsMsg = currentLang === 'ru' ? '💬 Пока нет отзывов. Будьте первым!' : '💬 No reviews yet. Be the first!';
+            container.innerHTML = `<div class="no-reviews">${noReviewsMsg}</div>`;
             return;
         }
         
-        container.innerHTML = reviews.map(review => `
-            <div class="review-card" data-id="${review.id}">
-                <div class="review-header">
-                    <div class="review-user">
-                        <div class="review-avatar">${review.userNickname ? review.userNickname.charAt(0).toUpperCase() : 'U'}</div>
-                        <div class="review-user-info">
-                            <span class="review-nickname">${escapeHtml(review.userNickname || 'Пользователь')}</span>
-                            <span class="review-date">${formatDate(review.createdAt)}</span>
+        const currentLang = getCurrentLanguage();
+        
+        container.innerHTML = reviews.map(review => {
+            const productName = getTranslatedValue(review.productName, currentLang);
+            const reviewText = getTranslatedValue(review.text, currentLang);
+            
+            return `
+                <div class="review-card" data-id="${review.id}">
+                    <div class="review-header">
+                        <div class="review-user">
+                            <div class="review-avatar">${review.userNickname ? review.userNickname.charAt(0).toUpperCase() : 'U'}</div>
+                            <div class="review-user-info">
+                                <span class="review-nickname">${escapeHtml(review.userNickname || 'Пользователь')}</span>
+                                <span class="review-date">${formatDate(review.createdAt)}</span>
+                            </div>
+                        </div>
+                        <div class="review-rating">
+                            ${generateStars(review.rating)}
                         </div>
                     </div>
-                    <div class="review-rating">
-                        ${generateStars(review.rating)}
-                    </div>
+                    <div class="review-product">📦 ${escapeHtml(productName)}</div>
+                    <div class="review-text">${escapeHtml(reviewText)}</div>
                 </div>
-                <div class="review-product">📦 ${escapeHtml(review.productName)}</div>
-                <div class="review-text">${escapeHtml(review.text)}</div>
-            </div>
-        `).join('');
+            `;
+        }).join('');
         
     } catch (error) {
         console.error('Ошибка загрузки отзывов:', error);
         const container = document.getElementById('reviewsContainer');
         if (container) {
-            container.innerHTML = '<div class="no-reviews">❌ Ошибка загрузки отзывов</div>';
+            const currentLang = getCurrentLanguage();
+            const errorMsg = currentLang === 'ru' ? '❌ Ошибка загрузки отзывов' : '❌ Error loading reviews';
+            container.innerHTML = `<div class="no-reviews">${errorMsg}</div>`;
         }
     }
 }
@@ -178,6 +263,7 @@ function formatDate(dateString) {
 }
 
 function escapeHtml(text) {
+    if (!text) return '';
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
@@ -320,12 +406,14 @@ function setupRatingStars() {
 
 async function submitFeedback() {
     if (!currentUser) {
-        showMessage('Необходимо войти в аккаунт', 'error');
+        const msg = getCurrentLanguage() === 'ru' ? 'Необходимо войти в аккаунт' : 'Please log in to your account';
+        showMessage(msg, 'error');
         return;
     }
     
     if (currentUser.role === 'admin') {
-        showMessage('Администратор не может оставлять отзывы', 'error');
+        const msg = getCurrentLanguage() === 'ru' ? 'Администратор не может оставлять отзывы' : 'Admin cannot leave reviews';
+        showMessage(msg, 'error');
         return;
     }
     
@@ -338,23 +426,39 @@ async function submitFeedback() {
     
     const hasPurchased = await hasUserPurchasedProduct(currentUser.id, productId);
     if (!hasPurchased) {
-        showMessage('Вы можете оставить отзыв только на товары, которые вы купили', 'error');
+        const msg = getCurrentLanguage() === 'ru' 
+            ? 'Вы можете оставить отзыв только на товары, которые вы купили'
+            : 'You can only leave reviews for products you have purchased';
+        showMessage(msg, 'error');
         return;
     }
     
     const productResponse = await fetch(`${API_URL}/products/${productId}`);
     const product = await productResponse.json();
     
+    const currentLang = getCurrentLanguage();
     const feedbackData = {
         id: Date.now(),
         userId: currentUser.id,
         userNickname: currentUser.nickname || `${currentUser.firstName} ${currentUser.lastName}`,
         productId: productId,
-        productName: product.name,
+        productName: {
+            en: product.name.en || product.name,
+            ru: product.name.ru || product.name
+        },
         rating: rating,
-        text: reviewText,
+        text: {
+            en: currentLang === 'en' ? reviewText : '',
+            ru: currentLang === 'ru' ? reviewText : ''
+        },
         createdAt: new Date().toISOString()
     };
+    
+    if (currentLang === 'ru') {
+        feedbackData.text.en = reviewText;
+    } else {
+        feedbackData.text.ru = reviewText;
+    }
     
     try {
         const response = await fetch(`${API_URL}/feedback`, {
@@ -365,7 +469,8 @@ async function submitFeedback() {
         
         if (!response.ok) throw new Error('Ошибка отправки');
         
-        showMessage('✅ Спасибо за ваш отзыв!', 'success');
+        const successMsg = currentLang === 'ru' ? '✅ Спасибо за ваш отзыв!' : '✅ Thank you for your review!';
+        showMessage(successMsg, 'success');
         
         document.getElementById('productSelect').value = '';
         document.getElementById('ratingValue').value = '0';
@@ -384,7 +489,8 @@ async function submitFeedback() {
         
     } catch (error) {
         console.error('Ошибка:', error);
-        showMessage('Ошибка при отправке отзыва', 'error');
+        const errorMsg = getCurrentLanguage() === 'ru' ? 'Ошибка при отправке отзыва' : 'Error submitting review';
+        showMessage(errorMsg, 'error');
     }
 }
 
@@ -392,6 +498,7 @@ function checkAuth() {
     const savedUser = localStorage.getItem('currentUser');
     const authRequiredDiv = document.getElementById('authRequired');
     const feedbackFormDiv = document.getElementById('feedbackForm');
+    const currentLang = getCurrentLanguage();
     
     if (savedUser) {
         currentUser = JSON.parse(savedUser);
@@ -399,7 +506,9 @@ function checkAuth() {
         if (currentUser.role === 'admin') {
             if (authRequiredDiv) {
                 authRequiredDiv.style.display = 'block';
-                authRequiredDiv.innerHTML = '<p>🔒 Администраторы не могут оставлять отзывы</p>';
+                authRequiredDiv.innerHTML = currentLang === 'ru' 
+                    ? '<p>🔒 Администраторы не могут оставлять отзывы</p>'
+                    : '<p>🔒 Admins cannot leave reviews</p>';
             }
             if (feedbackFormDiv) feedbackFormDiv.style.display = 'none';
         } else {
@@ -408,8 +517,37 @@ function checkAuth() {
             loadProductsForSelect();
         }
     } else {
-        if (authRequiredDiv) authRequiredDiv.style.display = 'block';
+        if (authRequiredDiv) {
+            authRequiredDiv.style.display = 'block';
+            authRequiredDiv.innerHTML = currentLang === 'ru'
+                ? '<p>🔒 Для добавления отзыва необходимо <a href="register.html">войти в аккаунт</a></p>'
+                : '<p>🔒 You need to <a href="register.html">log in</a> to leave a review</p>';
+        }
         if (feedbackFormDiv) feedbackFormDiv.style.display = 'none';
+    }
+}
+
+function translatePageStaticElements() {
+    const currentLang = getCurrentLanguage();
+    
+    const leaveReviewTitle = document.querySelector('.feedback-form-container h2');
+    if (leaveReviewTitle) {
+        leaveReviewTitle.textContent = currentLang === 'ru' ? '📝 Оставить отзыв' : '📝 Leave a review';
+    }
+    
+    const customerReviewsTitle = document.querySelector('.reviews-list h2');
+    if (customerReviewsTitle) {
+        customerReviewsTitle.textContent = currentLang === 'ru' ? '📖 Отзывы покупателей' : '📖 Customer Reviews';
+    }
+    
+    const submitBtn = document.getElementById('submitReviewBtn');
+    if (submitBtn) {
+        submitBtn.textContent = currentLang === 'ru' ? 'Отправить отзыв' : 'Submit review';
+    }
+    
+    const loadingEl = document.querySelector('.loading');
+    if (loadingEl) {
+        loadingEl.textContent = currentLang === 'ru' ? 'Загрузка отзывов...' : 'Loading reviews...';
     }
 }
 
@@ -444,6 +582,27 @@ function setupEventListeners() {
     }
 }
 
+function translateFeedbackPage() {
+    translatePageStaticElements();
+    loadProductsForFilter();
+    translateRatingFilter();
+    loadReviews();
+    if (currentUser && currentUser.role !== 'admin') {
+        loadProductsForSelect();
+    }
+}
+
+window.addEventListener('storage', (event) => {
+    if (event.key === 'language') {
+        setTimeout(() => {
+            translateFeedbackPage();
+            if (currentUser && currentUser.role !== 'admin') {
+                checkAuth();
+            }
+        }, 50);
+    }
+});
+
 document.addEventListener('DOMContentLoaded', async () => {
     console.log('Страница отзывов загружена');
     
@@ -451,8 +610,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     checkAuth();
     
     await loadProductsForFilter();
+    
+    translateRatingFilter();
+    resetRatingFilterToAll();
+    
     await loadReviews();
     
+    translatePageStaticElements();
     setupRatingStars();
     setupEventListeners();
     updateCharCount();

@@ -32,6 +32,26 @@ function checkAdminAccess() {
     return false;
 }
 
+function getProductName(product) {
+    if (!product) return 'Товар';
+    if (typeof product === 'string') return product;
+    if (typeof product.name === 'string') return product.name;
+    
+    const currentLang = localStorage.getItem('language') || 'ru';
+    if (product.name && typeof product.name === 'object') {
+        return product.name[currentLang] || product.name['ru'] || product.name['en'] || 'Товар';
+    }
+    return 'Товар';
+}
+
+function getProductDescription(product) {
+    if (!product || !product.description) return '';
+    if (typeof product.description === 'string') return product.description;
+    
+    const currentLang = localStorage.getItem('language') || 'ru';
+    return product.description[currentLang] || product.description['ru'] || product.description['en'] || '';
+}
+
 async function loadProducts() {
     try {
         const response = await fetch(`${API_URL}/products`);
@@ -39,7 +59,10 @@ async function loadProducts() {
         
         const searchTerm = document.getElementById('searchProduct')?.value.toLowerCase() || '';
         if (searchTerm) {
-            products = products.filter(p => p.name.toLowerCase().includes(searchTerm));
+            products = products.filter(p => {
+                const productName = getProductName(p).toLowerCase();
+                return productName.includes(searchTerm);
+            });
         }
         
         const container = document.getElementById('productsContainer');
@@ -60,14 +83,14 @@ async function loadProducts() {
                         <tr>
                             <td>${product.id}</td>
                             <td><img src="../${product.image}" class="product-image" onerror="this.src='../assets/images/chair.png'"></td>
-                            <td>${escapeHtml(product.name)}</td>
+                            <td>${escapeHtml(getProductName(product))}</td>
                             <td>${getCategoryLabel(product.category)}</td>
                             <td>${product.price} £</td>
                             <td>${product.inStock ? 'В наличии' : 'Нет в наличии'}</td>
                             <td>
                                 <div class="action-buttons">
                                     <button class="edit-btn" onclick="openEditProductModal(${product.id})">Редактировать</button>
-                                    <button class="delete-btn" onclick="openDeleteProductModal(${product.id}, '${escapeHtml(product.name)}')">Удалить</button>
+                                    <button class="delete-btn" onclick="openDeleteProductModal(${product.id}, '${escapeHtml(getProductName(product))}')">Удалить</button>
                                 </div>
                             </td>
                         </tr>
@@ -89,7 +112,7 @@ async function loadProductsForSelect() {
         const filterSelect = document.getElementById('adminFilterProduct');
         if (filterSelect) {
             filterSelect.innerHTML = '<option value="all">Все товары</option>' +
-                products.map(p => `<option value="${p.id}">${escapeHtml(p.name)}</option>`).join('');
+                products.map(p => `<option value="${p.id}">${escapeHtml(getProductName(p))}</option>`).join('');
         }
     } catch (error) {
         console.error('Ошибка загрузки товаров для фильтра:', error);
@@ -109,6 +132,22 @@ async function loadUsersForFilter() {
     } catch (error) {
         console.error('Ошибка загрузки пользователей:', error);
     }
+}
+
+function getReviewText(review) {
+    if (!review.text) return '';
+    if (typeof review.text === 'string') return review.text;
+    
+    const currentLang = localStorage.getItem('language') || 'ru';
+    return review.text[currentLang] || review.text['ru'] || review.text['en'] || '';
+}
+
+function getReviewProductName(review) {
+    if (!review.productName) return 'Товар';
+    if (typeof review.productName === 'string') return review.productName;
+    
+    const currentLang = localStorage.getItem('language') || 'ru';
+    return review.productName[currentLang] || review.productName['ru'] || review.productName['en'] || 'Товар';
 }
 
 async function loadReviews() {
@@ -142,15 +181,15 @@ async function loadReviews() {
             <div class="review-card" data-id="${review.id}">
                 <div class="review-header">
                     <div>
-                        <span class="review-user">${escapeHtml(review.userNickname)}</span>
-                        <span class="review-product">${escapeHtml(review.productName)}</span>
+                        <span class="review-user">${escapeHtml(review.userNickname || 'Пользователь')}</span>
+                        <span class="review-product">${escapeHtml(getReviewProductName(review))}</span>
                     </div>
                     <div>
                         <span class="review-rating">${'★'.repeat(review.rating)}${'☆'.repeat(5 - review.rating)}</span>
                         <button class="delete-review-btn" onclick="deleteReview(${review.id})">Удалить</button>
                     </div>
                 </div>
-                <div class="review-text">${escapeHtml(review.text)}</div>
+                <div class="review-text">${escapeHtml(getReviewText(review))}</div>
                 <div class="review-date">${formatDate(review.createdAt)}</div>
             </div>
         `).join('');
@@ -221,10 +260,16 @@ window.openAddProductModal = () => {
                     
                     const newProduct = {
                         id: maxId + 1,
-                        name: data.name,
+                        name: {
+                            ru: data.name,
+                            en: data.name
+                        },
                         price: parseFloat(data.price),
                         category: data.category,
-                        description: data.description,
+                        description: {
+                            ru: data.description,
+                            en: data.description
+                        },
                         image: data.image,
                         inStock: data.stock === 'true',
                         rating: parseFloat(data.rating) || 5,
@@ -258,7 +303,7 @@ window.openEditProductModal = async (productId) => {
             window.modalManager.openFormModal(
                 'Редактирование товара',
                 [
-                    { name: 'name', label: 'Название товара', type: 'text', required: true, value: product.name, placeholder: 'Введите название' },
+                    { name: 'name', label: 'Название товара', type: 'text', required: true, value: getProductName(product), placeholder: 'Введите название' },
                     { name: 'price', label: 'Цена (£)', type: 'number', required: true, value: product.price, placeholder: '0.00' },
                     { 
                         name: 'category', 
@@ -276,7 +321,7 @@ window.openEditProductModal = async (productId) => {
                             { value: 'ceramics', text: 'Керамика' }
                         ]
                     },
-                    { name: 'description', label: 'Описание', type: 'textarea', required: true, value: product.description, placeholder: 'Введите описание товара...' },
+                    { name: 'description', label: 'Описание', type: 'textarea', required: true, value: getProductDescription(product), placeholder: 'Введите описание товара...' },
                     { name: 'image', label: 'URL изображения', type: 'text', required: true, value: product.image, placeholder: 'assets/images/chair.png' },
                     { 
                         name: 'stock', 
@@ -310,15 +355,24 @@ window.openEditProductModal = async (productId) => {
                 ],
                 async (data) => {
                     try {
+                        const oldName = typeof product.name === 'object' ? product.name : { ru: data.name, en: data.name };
+                        const oldDescription = typeof product.description === 'object' ? product.description : { ru: data.description, en: data.description };
+                        
                         await fetch(`${API_URL}/products/${productId}`, {
                             method: 'PUT',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({
                                 ...product,
-                                name: data.name,
+                                name: {
+                                    ru: data.name,
+                                    en: oldName.en || data.name
+                                },
                                 price: parseFloat(data.price),
                                 category: data.category,
-                                description: data.description,
+                                description: {
+                                    ru: data.description,
+                                    en: oldDescription.en || data.description
+                                },
                                 image: data.image,
                                 inStock: data.stock === 'true',
                                 rating: parseFloat(data.rating) || product.rating
@@ -391,6 +445,7 @@ function getCategoryLabel(categoryValue) {
 }
 
 function escapeHtml(text) {
+    if (!text) return '';
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;

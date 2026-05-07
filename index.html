@@ -6,6 +6,8 @@
     <link rel="stylesheet" href="css/media.css">
     <link rel="stylesheet" href="css/animations.css">
     <link rel="stylesheet" href="css/features.css">
+    <link rel="stylesheet" href="css/themes.css">
+    <link rel="stylesheet" href="css/profile.css">
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🌿%3C/text%3E%3C/svg%3E">
     <script src="https://api-maps.yandex.ru/2.1/?apikey=ваш_ключ&lang=ru_RU"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,7 +17,7 @@
 
 <div class="vertical-line">
     <div class="logo-container">
-        <img src="assets/icons/logo.png" alt="logo">
+        <img src="assets/icons/logo.png" alt="logo" data-theme-img data-light-src="assets/icons/logo.png" data-dark-src="assets/icons/logo.png">
     </div>
 
     <nav class="menu-container" aria-label="Sidebar navigation">
@@ -23,42 +25,42 @@
             <div class="active-indicator"></div>
             <a href="#hero" data-section="hero">
                 <img src="assets/icons/home.png" alt="home">
-                <span>Home</span>
+                <span data-i18n="home">Home</span>
             </a>
         </div>
 
         <div class="menu-item shop-item">
             <a href="pages/catalog.html">
                 <img src="assets/icons/shop.png" alt="shop">
-                <span>Shop</span>
+                <span data-i18n="shop">Shop</span>
             </a>
         </div>
 
         <div class="menu-item blog-item">
             <a href="#products" data-section="products">
                 <img src="assets/icons/blog.png" alt="blog">
-                <span>Products</span>
+                <span data-i18n="products">Products</span>
             </a>
         </div>
 
         <div class="menu-item about-item">
             <a href="#about" data-section="about">
                 <img src="assets/icons/about_us.png" alt="about us">
-                <span>About</span>
+                <span data-i18n="about">About</span>
             </a>
         </div>
 
         <div class="menu-item gallery-item">
             <a href="#gallery" data-section="gallery">
                 <img src="assets/icons/gallery.png" alt="gallery">
-                <span>Gallery</span>
+                <span data-i18n="gallery">Gallery</span>
             </a>
         </div>
 
         <div class="menu-item location-item">
             <a href="#map-section" data-section="map-section">
                 <img src="assets/icons/location.png" alt="location">
-                <span>Location</span>
+                <span data-i18n="location">Location</span>
             </a>
         </div>
     </nav>
@@ -69,13 +71,13 @@
         <div class="container">
             <div class="header-line">
                 <div class="nav-left">
-                    <div class="nav-item-with-icon">
-                        <a class="nav-item" href="pages/register.html">LOGIN</a>
+                    <div class="nav-item-with-icon" id="loginBtnContainer">
+                        <a class="nav-item" href="javascript:void(0)" onclick="openAuthPage('login')" data-i18n="login">LOGIN</a>
                         <img src="assets/icons/human.png" alt="user" class="nav-icon">
                     </div>
 
-                    <div class="nav-item-with-icon">
-                        <a class="nav-item" href="pages/register.html">SIGN UP</a>
+                    <div class="nav-item-with-icon" id="signupBtnContainer">
+                        <a class="nav-item" href="javascript:void(0)" onclick="openAuthPage('register')" data-i18n="signup">SIGN UP</a>
                         <img src="assets/icons/door.png" alt="door" class="nav-icon">
                     </div>
                 </div>
@@ -83,33 +85,33 @@
                 <div class="nav-right">
                     <div class="nav-item-with-icon">
                         <img src="assets/icons/email.png" alt="email" class="nav-icon">
-                        <a class="nav-item" href="#">MAILING LIST</a>
+                        <a class="nav-item" href="#" data-i18n="mailing">MAILING LIST</a>
                     </div>
 
                     <div class="nav-item-with-icon">
                         <img src="assets/icons/symbol.png" alt="share" class="nav-icon">
-                        <a class="nav-item" href="#">SHARE <span class="red-badge">12K</span></a>
+                        <a class="nav-item" href="#" data-i18n="share">SHARE <span class="red-badge">12K</span></a>
                     </div>
 
                     <div class="nav-item-with-icon">
                         <img src="assets/icons/cart.png" alt="cart" class="nav-icon">
-                        <a class="nav-item" href="pages/cart.html">CART <span class="red-badge" id="cartCount">0</span></a>
+                        <a class="nav-item" href="pages/cart.html" data-i18n="cart">CART <span class="red-badge" id="cartCount">0</span></a>
                     </div>
                 </div>
             </div>
 
             <div class="hero-content">
-                <p class="hero-small">Save The Weekend</p>
-                <p class="hero-medium">Awesome design</p>
-                <p class="hero-large furniture-line">Best Furniture For</p>
-                <p class="hero-large interior-line">Your Interior.</p>
-                <a href="pages/catalog.html" class="hero-button">Explore More</a>
+                <p class="hero-small" data-i18n="hero-small">Save The Weekend</p>
+                <p class="hero-medium" data-i18n="hero-medium">Awesome design</p>
+                <p class="hero-large furniture-line" data-i18n="hero-line1">Best Furniture For</p>
+                <p class="hero-large interior-line" data-i18n="hero-line2">Your Interior.</p>
+                <a href="pages/catalog.html" class="hero-button" data-i18n="explore-btn">Explore More</a>
             </div>
 
             <div class="feature-text-container">
                 <div class="feature-text">
-                    <p class="line1">Spacial Favric Last</p>
-                    <p class="line2">Longer Sofa.</p>
+                    <p class="line1" data-i18n="feature-text1">Spacial Favric Last</p>
+                    <p class="line2" data-i18n="feature-text2">Longer Sofa.</p>
                 </div>
                 <div class="feature-arrow">
                     <svg width="150" height="200" viewBox="0 0 150 200" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -137,12 +139,12 @@
     <main>
         <section class="gallery-block" aria-label="Brand gallery">
             <div class="container">
-                <img src="assets/images/photo1.png" alt="photo 1">
-                <img src="assets/images/photo2.png" alt="photo 2">
-                <img src="assets/images/photo3.png" alt="photo 3">
-                <img src="assets/images/photo4.png" alt="photo 4">
-                <img src="assets/images/photo5.png" alt="photo 5">
-                <img src="assets/images/photo6.png" alt="photo 6">
+                <img src="assets/images/photo1.png" alt="photo 1" data-theme-img data-light-src="assets/images/photo1.png" data-dark-src="assets/images/photo1.png">
+                <img src="assets/images/photo2.png" alt="photo 2" data-theme-img data-light-src="assets/images/photo2.png" data-dark-src="assets/images/photo2.png">
+                <img src="assets/images/photo3.png" alt="photo 3" data-theme-img data-light-src="assets/images/photo3.png" data-dark-src="assets/images/photo3.png">
+                <img src="assets/images/photo4.png" alt="photo 4" data-theme-img data-light-src="assets/images/photo4.png" data-dark-src="assets/images/photo4.png">
+                <img src="assets/images/photo5.png" alt="photo 5" data-theme-img data-light-src="assets/images/photo5.png" data-dark-src="assets/images/photo5.png">
+                <img src="assets/images/photo6.png" alt="photo 6" data-theme-img data-light-src="assets/images/photo6.png" data-dark-src="assets/images/photo6.png">
             </div>
         </section>
 
@@ -150,46 +152,45 @@
             <div class="counters-container">
                 <div class="counter-item">
                     <div class="counter-number" data-target="5000">0</div>
-                    <div class="counter-label">Счастливых клиентов</div>
+                    <div class="counter-label" data-i18n="clients">Счастливых клиентов</div>
                 </div>
                 <div class="counter-item">
                     <div class="counter-number" data-target="1200">0</div>
-                    <div class="counter-label">Проданных товаров</div>
+                    <div class="counter-label" data-i18n="sold">Проданных товаров</div>
                 </div>
                 <div class="counter-item">
                     <div class="counter-number" data-target="150">0</div>
-                    <div class="counter-label">Наград</div>
+                    <div class="counter-label" data-i18n="awards">Наград</div>
                 </div>
                 <div class="counter-item">
                     <div class="counter-number" data-target="24">0</div>
-                    <div class="counter-label">Лет опыта</div>
+                    <div class="counter-label" data-i18n="experience">Лет опыта</div>
                 </div>
             </div>
         </section>
 
         <section class="container2" aria-label="Our products" id="products">
             <div class="header2-text">
-                <h1>Our Products</h1>
+                <h1 data-i18n="our-products">Our Products</h1>
             </div>
 
             <nav class="menu-text" aria-label="Product categories">
-                <div class="sofa"><span>Single Sofa</span></div>
-                <div class="room"><span>Living Room</span></div>
-                <div class="kitchen"><span>Kitchen</span></div>
-                <div class="bed-room"><span>Bed Room</span></div>
-                <div class="bath-room"><span>Bath Room</span></div>
-                <div class="decorations"><span>Decorations</span></div>
-                <div class="Ceramics"><span>Ceramics</span></div>
+                <div class="sofa"><span data-i18n="cat-sofa">Single Sofa</span></div>
+                <div class="room"><span data-i18n="cat-living">Living Room</span></div>
+                <div class="kitchen"><span data-i18n="cat-kitchen">Kitchen</span></div>
+                <div class="bed-room"><span data-i18n="cat-bedroom">Bed Room</span></div>
+                <div class="bath-room"><span data-i18n="cat-bathroom">Bath Room</span></div>
+                <div class="decorations"><span data-i18n="cat-decor">Decorations</span></div>
+                <div class="Ceramics"><span data-i18n="cat-ceramics">Ceramics</span></div>
             </nav>
 
             <div class="main-picture">
-                <!-- Карточки товаров 1-6 -->
                 <article class="product-card" data-id="1">
                     <div class="picture1">
                         <div class="corner-badges">
                             <div class="badge badge-discount">-20%</div>
-                            <div class="badge badge-new">New</div>
-                            <div class="badge badge-out">Out of stock</div>
+                            <div class="badge badge-new" data-i18n="new">New</div>
+                            <div class="badge badge-out" data-i18n="out-stock">Out of stock</div>
                         </div>
                         <img src="assets/images/chair.png" alt="chair">
                         <div class="bottom-element">
@@ -200,7 +201,7 @@
                         </div>
                     </div>
                     <div class="product-info product-info-1">
-                        <h2 class="product-title title-1">Single Sofa</h2>
+                        <h2 class="product-title title-1" data-i18n="product-title-sofa">Single Sofa</h2>
                         <p class="product-price price-1">£423.00</p>
                         <div class="product-rating rating-1">
                             <span class="star">★</span>
@@ -226,7 +227,7 @@
                         </div>
                     </div>
                     <div class="product-info product-info-2">
-                        <h2 class="product-title title-2">Single Sofa</h2>
+                        <h2 class="product-title title-2" data-i18n="product-title-sofa">Single Sofa</h2>
                         <p class="product-price price-2">£423.00</p>
                         <div class="product-rating rating-2">
                             <span class="star">★</span>
@@ -242,7 +243,7 @@
                     <div class="picture3">
                         <div class="corner-badges">
                             <div class="badge badge-discount">-20%</div>
-                            <div class="badge badge-new">New</div>
+                            <div class="badge badge-new" data-i18n="new">New</div>
                         </div>
                         <img src="assets/images/chair3.png" alt="chair3">
                         <div class="bottom-element3">
@@ -253,7 +254,7 @@
                         </div>
                     </div>
                     <div class="product-info product-info-3">
-                        <h2 class="product-title title-3">Single Sofa</h2>
+                        <h2 class="product-title title-3" data-i18n="product-title-sofa">Single Sofa</h2>
                         <p class="product-price price-3">£423.00</p>
                         <div class="product-rating rating-3">
                             <span class="star">★</span>
@@ -269,8 +270,8 @@
                     <div class="picture4">
                         <div class="corner-badges">
                             <div class="badge badge-discount">-20%</div>
-                            <div class="badge badge-new">New</div>
-                            <div class="badge badge-out">Out of stock</div>
+                            <div class="badge badge-new" data-i18n="new">New</div>
+                            <div class="badge badge-out" data-i18n="out-stock">Out of stock</div>
                         </div>
                         <img src="assets/images/chair4.png" alt="chair4">
                         <div class="bottom-element4">
@@ -281,7 +282,7 @@
                         </div>
                     </div>
                     <div class="product-info product-info-4">
-                        <h2 class="product-title title-4">Single Sofa</h2>
+                        <h2 class="product-title title-4" data-i18n="product-title-sofa">Single Sofa</h2>
                         <p class="product-price price-4">£423.00</p>
                         <div class="product-rating rating-4">
                             <span class="star">★</span>
@@ -297,7 +298,7 @@
                     <div class="picture5">
                         <div class="corner-badges">
                             <div class="badge badge-discount">-20%</div>
-                            <div class="badge badge-new">New</div>
+                            <div class="badge badge-new" data-i18n="new">New</div>
                         </div>
                         <img src="assets/images/chair5.png" alt="chair5">
                         <div class="bottom-element5">
@@ -308,7 +309,7 @@
                         </div>
                     </div>
                     <div class="product-info product-info-5">
-                        <h2 class="product-title title-5">Single Sofa</h2>
+                        <h2 class="product-title title-5" data-i18n="product-title-sofa">Single Sofa</h2>
                         <p class="product-price price-5">£423.00</p>
                         <div class="product-rating rating-5">
                             <span class="star">★</span>
@@ -324,7 +325,7 @@
                     <div class="picture6">
                         <div class="corner-badges">
                             <div class="badge badge-discount">-20%</div>
-                            <div class="badge badge-new">New</div>
+                            <div class="badge badge-new" data-i18n="new">New</div>
                         </div>
                         <img src="assets/images/chair6.png" alt="chair6">
                         <div class="bottom-element6">
@@ -335,7 +336,7 @@
                         </div>
                     </div>
                     <div class="product-info product-info-6">
-                        <h2 class="product-title title-6">Single Sofa</h2>
+                        <h2 class="product-title title-6" data-i18n="product-title-sofa">Single Sofa</h2>
                         <p class="product-price price-6">£423.00</p>
                         <div class="product-rating rating-6">
                             <span class="star">★</span>
@@ -354,15 +355,15 @@
             <div class="parallax-layer layer-2"></div>
             <div class="parallax-layer layer-3"></div>
             <div class="parallax-content">
-                <h2>Создайте уют в своем доме</h2>
-                <p>Качественная мебель от лучших производителей</p>
+                <h2 data-i18n="parallax-title">Создайте уют в своем доме</h2>
+                <p data-i18n="parallax-text">Качественная мебель от лучших производителей</p>
             </div>
         </section>
 
         <section class="video-promo-section fade-on-scroll">
             <div class="video-promo-container">
-                <h2 class="video-promo-title">🎬 Видео-презентация</h2>
-                <p class="video-promo-subtitle">Посмотрите нашу новую коллекцию мебели 2024 года</p>
+                <h2 class="video-promo-title" data-i18n="video-title">🎬 Видео-презентация</h2>
+                <p class="video-promo-subtitle" data-i18n="video-subtitle">Посмотрите нашу новую коллекцию мебели 2024 года</p>
                 <div class="video-wrapper" id="videoWrapper">
                     <div class="video-thumbnail" id="videoThumbnail">
                         <div class="video-badge">
@@ -384,18 +385,18 @@
         </section>
 
         <section class="media-gallery fade-on-scroll" id="gallery">
-            <h2 style="font-size: 36px; color: #264A51; margin-bottom: 20px; text-align: center;">🎵 Медиагалерея</h2>
-            <p style="color: #5a7c85; margin-bottom: 30px; text-align: center;">Нажмите на кнопки, чтобы менять изображения и слушать звуки</p>
+            <h2 style="font-size: 36px; margin-bottom: 20px; text-align: center;" data-i18n="gallery-title">🎵 Медиагалерея</h2>
+            <p style="margin-bottom: 30px; text-align: center;" data-i18n="gallery-subtitle">Нажмите на кнопки, чтобы менять изображения и слушать звуки</p>
             <div class="gallery-container">
                 <div class="gallery-main">
                     <img id="galleryMainImage" class="gallery-main-image" src="assets/images/c1.jpg" alt="Gallery image" onerror="this.src='assets/images/chair.png'">
                 </div>
                 <div class="gallery-controls">
-                    <button class="gallery-btn" id="prevImageBtn">◀ Предыдущее</button>
-                    <button class="gallery-btn" id="randomImageBtn">🎲 Случайное</button>
-                    <button class="gallery-btn" id="nextImageBtn">Следующее ▶</button>
+                    <button class="gallery-btn" id="prevImageBtn" data-i18n="prev-btn">◀ Предыдущее</button>
+                    <button class="gallery-btn" id="randomImageBtn" data-i18n="random-btn">🎲 Случайное</button>
+                    <button class="gallery-btn" id="nextImageBtn" data-i18n="next-btn">Следующее ▶</button>
                 </div>
-                <div id="currentMusicInfo" style="text-align: center; margin: 10px 0; font-size: 14px; color: #71B3C6; font-weight: 500;"></div>
+                <div id="currentMusicInfo" style="text-align: center; margin: 10px 0; font-size: 14px; font-weight: 500;"></div>
                 <div class="gallery-audio">
                     <button class="audio-play-btn" id="audioPlayBtn">▶</button>
                     <div id="audioPlayingIndicator" class="audio-playing-indicator" style="display: none;">
@@ -412,14 +413,14 @@
 
         <section class="photo-gallery-section fade-on-scroll">
             <div class="photo-gallery-container">
-                <h2 class="photo-gallery-title">📷 Галерея товаров</h2>
-                <p class="photo-gallery-subtitle">Листайте фото, чтобы посмотреть наши товары</p>
+                <h2 class="photo-gallery-title" data-i18n="photo-title">📷 Галерея товаров</h2>
+                <p class="photo-gallery-subtitle" data-i18n="photo-subtitle">Листайте фото, чтобы посмотреть наши товары</p>
                 
                 <div class="photo-grid" id="photoGrid"></div>
                 
                 <div class="photo-nav">
-                    <button class="photo-nav-btn" id="prevPhotoBtn">◀ Назад</button>
-                    <button class="photo-nav-btn" id="nextPhotoBtn">Вперед ▶</button>
+                    <button class="photo-nav-btn" id="prevPhotoBtn" data-i18n="back-btn">◀ Назад</button>
+                    <button class="photo-nav-btn" id="nextPhotoBtn" data-i18n="forward-btn">Вперед ▶</button>
                 </div>
                 <div class="photo-indicator" id="photoIndicator"></div>
             </div>
@@ -429,30 +430,30 @@
             <img src="assets/images/bg2.jpg" alt="Background">
             <div class="text-overlay">
                 <h1>50% OFF</h1>
-                <h2>Weekend Trendy Sofa</h2>
-                <p>Contrary to popular belief, Lorem Ipsum is not simply random text. literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin.</p>
-                <button>View Items</button>
+                <h2 data-i18n="weekend-trendy">Weekend Trendy Sofa</h2>
+                <p data-i18n="promo-text-1">Contrary to popular belief, Lorem Ipsum is not simply random text. literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin.</p>
+                <button data-i18n="view-items">View Items</button>
             </div>
         </section>
 
         <section class="image-container2" aria-label="Living room items">
             <img src="assets/images/bg3.jpg" alt="Living Room">
             <div class="content">
-                <h2 class="content-title">Living Room Items</h2>
-                <p class="content-text">Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45  professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur.</p>
-                <button class="content-button">Read More</button>
+                <h2 class="content-title" data-i18n="living-items">Living Room Items</h2>
+                <p class="content-text" data-i18n="promo-text-2">Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur.</p>
+                <button class="content-button" data-i18n="read-more">Read More</button>
             </div>
             <div class="living-badge">
-                <span>Living</span>
+                <span data-i18n="cat-living">Living</span>
             </div>
         </section>
 
         <section class="image-container3" aria-label="Trendy dining table">
             <img src="assets/images/bg4.jpg" alt="Dining Table">
             <div class="content2">
-                <h2>Trendy Dining Table</h2>
-                <p>Contrary to popular belief, Lorem Ipsum is not simply random text. literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin.</p>
-                <button>View Items</button>
+                <h2 data-i18n="trendy-dining">Trendy Dining Table</h2>
+                <p data-i18n="promo-text-3">Contrary to popular belief, Lorem Ipsum is not simply random text. literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin.</p>
+                <button data-i18n="view-items">View Items</button>
             </div>
             <div class="living-badge2">
                 <span>Dining</span>
@@ -462,9 +463,9 @@
         <section class="image-container4" aria-label="Modern bed">
             <img src="assets/images/bg5.jpg" alt="Modern Bed">
             <div class="content3">
-                <h2>Modern Bed</h2>
-                <p>Contrary to popular belief, Lorem Ipsum is not simply random text. literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin.</p>
-                <button>View Items</button>
+                <h2 data-i18n="modern-bed">Modern Bed</h2>
+                <p data-i18n="promo-text-4">Contrary to popular belief, Lorem Ipsum is not simply random text. literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin.</p>
+                <button data-i18n="view-items">View Items</button>
             </div>
             <div class="living-badge3">
                 <span>Bed</span>
@@ -474,12 +475,12 @@
         <section class="image-container5" aria-label="Popular kitchen items">
             <img src="assets/images/bg6.jpg" alt="Kitchen">
             <div class="content4">
-                <h2>Populer kitchen Items</h2>
-                <p>Contrary to popular belief, Lorem Ipsum is not simply random text. literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin.</p>
-                <button>View Items</button>
+                <h2 data-i18n="popular-kitchen">Populer kitchen Items</h2>
+                <p data-i18n="promo-text-5">Contrary to popular belief, Lorem Ipsum is not simply random text. literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin.</p>
+                <button data-i18n="view-items">View Items</button>
             </div>
             <div class="living-badge4">
-                <span>Kitchen</span>
+                <span data-i18n="cat-kitchen">Kitchen</span>
             </div>
         </section>
 
@@ -493,11 +494,11 @@
     <footer class="subscribe">
         <img src="assets/images/bg7.jpg" alt="Subscribe Background">
         <div class="content5">
-            <h2>Get 30% Off</h2>
-            <p>Contrary to popular belief, Lorem Ipsum is not simply years old. Richard McClintock, a Latin.</p>
+            <h2 data-i18n="get-offer">Get 30% Off</h2>
+            <p data-i18n="subscribe-text">Contrary to popular belief, Lorem Ipsum is not simply years old. Richard McClintock, a Latin.</p>
             <div class="input">
-                <span>Enter Your Email</span>
-                <button>Subscribe</button>
+                <span data-i18n="enter-email">Enter Your Email</span>
+                <button data-i18n="subscribe-btn">Subscribe</button>
             </div>
         </div>
     </footer>
@@ -506,8 +507,8 @@
         <div class="bottom-design">
             <div class="content6">
                 <div class="footer-col logo-col">
-                    <img src="assets/images/photo7.png" alt="Logo">
-                    <p>Contrary to popular belief, Lorem Ipsum is not simply years old Latin.</p>
+                    <img src="assets/images/photo7.png" alt="Logo" data-theme-img data-light-src="assets/images/photo7.png" data-dark-src="assets/images/photo7.png">
+                    <p data-i18n="footer-text">Contrary to popular belief, Lorem Ipsum is not simply years old Latin.</p>
                     <ul class="circle">
                         <li><div class="social-circle"><img src="assets/icons/facebook.png" alt=""></div></li>
                         <li><div class="social-circle"><img src="assets/icons/instagram.png" alt=""></div></li>
@@ -517,18 +518,18 @@
                 </div>
 
                 <div class="footer-col">
-                    <h3>Explore</h3>
+                    <h3 data-i18n="explore">Explore</h3>
                     <div class="footer-links">
-                        <span>About Us</span>
-                        <span>Services</span>
-                        <span>Our Team</span>
-                        <span>Trendy</span>
-                        <span>Gallery</span>
+                        <span data-i18n="about-us">About Us</span>
+                        <span data-i18n="services">Services</span>
+                        <span data-i18n="our-team">Our Team</span>
+                        <span data-i18n="trendy">Trendy</span>
+                        <span data-i18n="gallery">Gallery</span>
                     </div>
                 </div>
 
                 <div class="footer-col">
-                    <h3>Contact Us</h3>
+                    <h3 data-i18n="contact-us">Contact Us</h3>
                     <div class="footer-contact">
                         <p>45 Tooring High SL London SA17 United Kingdom</p>
                         <p>018123456789</p>
@@ -537,19 +538,19 @@
                 </div>
 
                 <div class="footer-col">
-                    <h3>Service Hours</h3>
+                    <h3 data-i18n="service-hours">Service Hours</h3>
                     <div class="service-hours-box">
                         <div class="hours-row">
-                            <span class="day">Mon-Fri:</span>
+                            <span class="day" data-i18n="mon-fri">Mon-Fri:</span>
                             <span class="time">09.00am - 19.00pm</span>
                         </div>
                         <div class="hours-row">
-                            <span class="day">Saturday:</span>
+                            <span class="day" data-i18n="saturday">Saturday:</span>
                             <span class="time">10.00am - 18.00pm</span>
                         </div>
                         <div class="hours-row">
-                            <span class="day">Sunday:</span>
-                            <span class="time">We are Closed</span>
+                            <span class="day" data-i18n="sunday">Sunday:</span>
+                            <span class="time" data-i18n="closed">We are Closed</span>
                         </div>
                     </div>
                 </div>
@@ -558,11 +559,15 @@
     </footer>
 
     <div class="copyright-bar">
-        <span class="text">2021 Greenery. All Right Reserved</span>
+        <span class="text" data-i18n="copyright">2021 Greenery. All Right Reserved</span>
     </div>
 </div>
 
+<script src="js/translations.js"></script>
+<script src="js/theme.js"></script>
+<script src="js/profile.js"></script>
 <script src="js/features.js"></script>
+<script src="js/auth.js"></script>
 <script>
     async function updateCartCount() {
         try {
@@ -576,26 +581,73 @@
         }
     }
     
+    function openAuthPage(tab) {
+        localStorage.setItem('authTab', tab);
+        window.location.href = 'pages/register.html';
+    }
+    
     function checkAuth() {
         const savedUser = localStorage.getItem('currentUser');
-        const loginLink = document.querySelector('.nav-left .nav-item-with-icon:first-child a');
-        const signupLink = document.querySelector('.nav-left .nav-item-with-icon:last-child a');
+        
+        const loginContainer = document.getElementById('loginBtnContainer');
+        const signupContainer = document.getElementById('signupBtnContainer');
         
         if (savedUser) {
             const user = JSON.parse(savedUser);
-            if (loginLink) {
-                loginLink.textContent = user.nickname;
-                loginLink.href = "#";
-            }
-            if (signupLink) {
-                signupLink.textContent = "LOGOUT";
-                signupLink.href = "#";
-                signupLink.addEventListener('click', (e) => {
-                    e.preventDefault();
+            
+            if (loginContainer) loginContainer.style.display = 'none';
+            if (signupContainer) signupContainer.style.display = 'none';
+            
+            if (!document.querySelector('.user-icon')) {
+                const navLeft = document.querySelector('.nav-left');
+                const userIcon = document.createElement('div');
+                userIcon.className = 'user-icon';
+                userIcon.style.cssText = `
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    cursor: pointer;
+                    padding: 5px 10px;
+                    border-radius: 25px;
+                    background: var(--card-bg, #F1F6F9);
+                    transition: all 0.3s ease;
+                `;
+                userIcon.innerHTML = `
+                    <img src="assets/icons/human.png" alt="profile" style="width: 24px; height: 24px;">
+                    <span style="color: var(--text-primary, #264A51); font-weight: 500; font-size: 14px;">${user.nickname || user.firstName}</span>
+                    <button class="logout-btn" style="
+                        margin-left: 5px;
+                        background: none;
+                        border: none;
+                        cursor: pointer;
+                        font-size: 16px;
+                        padding: 4px 8px;
+                        border-radius: 50%;
+                        transition: all 0.3s ease;
+                    " title="Выйти">🚪</button>
+                `;
+                
+                const logoutBtn = userIcon.querySelector('.logout-btn');
+                logoutBtn.onclick = (e) => {
+                    e.stopPropagation();
                     localStorage.removeItem('currentUser');
                     window.location.reload();
+                };
+                
+                userIcon.addEventListener('click', (e) => {
+                    if (e.target !== logoutBtn && window.profileModal) {
+                        window.profileModal.open();
+                    }
                 });
+                
+                navLeft.appendChild(userIcon);
             }
+        } else {
+            if (loginContainer) loginContainer.style.display = 'flex';
+            if (signupContainer) signupContainer.style.display = 'flex';
+            
+            const userIcon = document.querySelector('.user-icon');
+            if (userIcon) userIcon.remove();
         }
     }
     

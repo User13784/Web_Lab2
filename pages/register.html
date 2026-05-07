@@ -5,49 +5,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>Регистрация / Авторизация - Greenery</title>
     <link rel="stylesheet" href="../css/register.css">
-        <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🌿%3C/text%3E%3C/svg%3E">
-
+    <link rel="stylesheet" href="../css/themes.css">
+    <link rel="stylesheet" href="../css/profile.css">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🌿%3C/text%3E%3C/svg%3E">
 </head>
 <body>
     <div class="vertical-line">
         <div class="logo-container">
-            <img src="../assets/icons/logo.png" alt="logo">
+            <img src="../assets/icons/logo.png" alt="logo" data-theme-img data-light-src="../assets/icons/logo.png" data-dark-src="../assets/icons/logo.png">
         </div>
         <nav class="menu-container">
             <div class="menu-item home-item">
                 <a href="../index.html">
                     <img src="../assets/icons/home.png" alt="home">
-                    <span>Home</span>
+                    <span data-i18n="home">Home</span>
                 </a>
             </div>
             <div class="menu-item shop-item">
                 <a href="catalog.html">
                     <img src="../assets/icons/shop.png" alt="shop">
-                    <span>Shop</span>
+                    <span data-i18n="shop">Shop</span>
                 </a>
             </div>
             <div class="menu-item">
                 <a href="favorites.html">
                     <img src="../assets/icons/heart.png" alt="favorites">
-                    <span>Favorites</span>
+                    <span data-i18n="favorites">Favorites</span>
                 </a>
             </div>
             <div class="menu-item">
                 <a href="feedback.html">
                     <img src="../assets/icons/blog.png" alt="reviews">
-                    <span>Reviews</span>
+                    <span data-i18n="reviews">Reviews</span>
                 </a>
             </div>
             <div class="menu-item">
                 <a href="cart.html">
                     <img src="../assets/icons/cart.png" alt="cart">
-                    <span>Cart</span>
+                    <span data-i18n="cart">Cart</span>
                 </a>
             </div>
             <div class="menu-item" id="adminMenuItem" style="display: none;">
                 <a href="admin.html">
                     <img src="../assets/icons/settings.png" alt="admin">
-                    <span>Admin</span>
+                    <span data-i18n="admin">Admin</span>
                 </a>
             </div>
         </nav>
@@ -55,114 +56,102 @@
 
     <div class="main-content">
         <div class="catalog-header">
-            <h1>🔐 Аккаунт</h1>
-            <p>Войдите или создайте новый аккаунт</p>
-            <a href="catalog.html" class="back-link">← Вернуться в каталог</a>
+            <h1 data-i18n="account">🔐 Аккаунт</h1>
+            <p data-i18n="login-or-register">Войдите или создайте новый аккаунт</p>
+            <a href="catalog.html" class="back-link" data-i18n="back-to-catalog">← Вернуться в каталог</a>
         </div>
 
         <div class="auth-container">
             <div class="auth-tabs">
-                <button class="tab-btn active" id="loginTab">Вход</button>
-                <button class="tab-btn" id="registerTab">Регистрация</button>
+                <button class="tab-btn active" id="loginTab" data-i18n="login-tab">Вход</button>
+                <button class="tab-btn" id="registerTab" data-i18n="register-tab">Регистрация</button>
             </div>
             
             <div id="loginForm" class="auth-form">
                 <form id="loginFormContent">
                     <div class="form-group">
-                        <label class="required-label">Email</label>
+                        <label class="required-label" data-i18n="email">Email</label>
                         <input type="email" id="loginEmail" placeholder="example@mail.com">
                     </div>
-                    
                     <div class="form-group">
-                        <label class="required-label">Пароль</label>
+                        <label class="required-label" data-i18n="password">Пароль</label>
                         <div class="password-group">
                             <input type="password" id="loginPassword" placeholder="Введите пароль">
                             <button type="button" class="password-toggle" onclick="togglePasswordVisibility('loginPassword', this)">👁️</button>
                         </div>
                     </div>
-                    
-                    <button type="submit" class="submit-btn">Войти</button>
+                    <button type="submit" class="submit-btn" data-i18n="login-btn">Войти</button>
                 </form>
             </div>
             
             <div id="registerForm" class="auth-form" style="display: none;">
                 <form id="registerFormContent">
                     <div class="form-group">
-                        <label class="required-label">Номер телефона (РБ)</label>
+                        <label class="required-label" data-i18n="phone">Номер телефона (РБ)</label>
                         <input type="tel" id="regPhone" placeholder="+375291234567">
                         <div class="error-message" id="phoneError"></div>
                     </div>
-                    
                     <div class="form-group">
-                        <label class="required-label">Email</label>
+                        <label class="required-label" data-i18n="email">Email</label>
                         <input type="email" id="regEmail" placeholder="example@mail.com">
                         <div class="error-message" id="emailError"></div>
                     </div>
-                    
                     <div class="form-group">
-                        <label class="required-label">Дата рождения</label>
+                        <label class="required-label" data-i18n="birthdate">Дата рождения</label>
                         <input type="date" id="regBirthDate">
                         <div class="error-message" id="birthError"></div>
                     </div>
-                    
                     <div class="form-group">
-                        <label class="required-label">Имя</label>
+                        <label class="required-label" data-i18n="firstname">Имя</label>
                         <input type="text" id="regFirstName" placeholder="Иван">
                         <div class="error-message" id="firstNameError"></div>
                     </div>
-                    
                     <div class="form-group">
-                        <label class="required-label">Фамилия</label>
+                        <label class="required-label" data-i18n="lastname">Фамилия</label>
                         <input type="text" id="regLastName" placeholder="Петров">
                         <div class="error-message" id="lastNameError"></div>
                     </div>
-                    
                     <div class="form-group">
-                        <label>Отчество (необязательно)</label>
+                        <label data-i18n="patronymic">Отчество (необязательно)</label>
                         <input type="text" id="regPatronymic" placeholder="Иванович">
                     </div>
-                    
                     <div class="form-group">
-                        <label class="required-label">Никнейм</label>
+                        <label class="required-label" data-i18n="nickname">Никнейм</label>
                         <div class="nickname-wrapper">
                             <input type="text" id="regNickname" readonly placeholder="Будет сгенерирован автоматически">
-                            <button type="button" class="generate-btn" id="generateNicknameBtn">🎲 Сгенерировать</button>
+                            <button type="button" class="generate-btn" id="generateNicknameBtn" data-i18n="generate">🎲 Сгенерировать</button>
                         </div>
-                        <div class="attempts-info" id="attemptsInfo">Осталось попыток генерации: 5</div>
+                        <div class="attempts-info" id="attemptsInfo" data-i18n="attempts-left">Осталось попыток генерации: 5</div>
                         <div class="error-message" id="nicknameError"></div>
                     </div>
-                    
                     <div class="form-group">
-                        <label>Способ задания пароля</label>
+                        <label data-i18n="password-method">Способ задания пароля</label>
                         <div class="password-method">
-                            <label><input type="radio" name="passwordMethod" value="auto" checked> Автоматически</label>
-                            <label><input type="radio" name="passwordMethod" value="manual"> Самостоятельно</label>
+                            <label><input type="radio" name="passwordMethod" value="auto" checked> <span data-i18n="auto">Автоматически</span></label>
+                            <label><input type="radio" name="passwordMethod" value="manual"> <span data-i18n="manual">Самостоятельно</span></label>
                         </div>
                     </div>
-                    
                     <div id="autoPasswordGroup">
                         <div class="form-group">
-                            <label>Сгенерированный пароль</label>
+                            <label data-i18n="generated-password">Сгенерированный пароль</label>
                             <div class="password-group">
                                 <input type="text" id="autoPassword" readonly>
                             </div>
-                            <div class="password-hint">Сохраните этот пароль в надежном месте</div>
+                            <div class="password-hint" data-i18n="save-password">Сохраните этот пароль в надежном месте</div>
                         </div>
                     </div>
-                    
                     <div id="manualPasswordGroup" style="display: none;">
                         <div class="form-group">
-                            <label class="required-label">Пароль</label>
+                            <label class="required-label" data-i18n="password">Пароль</label>
                             <div class="password-group">
                                 <input type="password" id="regPassword" placeholder="Введите пароль">
                                 <button type="button" class="password-toggle" onclick="togglePasswordVisibility('regPassword', this)">👁️</button>
                             </div>
-                            <div class="password-hint">Пароль должен содержать: минимум 8 символов, заглавную и строчную буквы, цифру и спецсимвол</div>
+                            <div class="password-hint" data-i18n="password-hint">Пароль должен содержать: минимум 8 символов, заглавную и строчную буквы, цифру и спецсимвол</div>
                             <div class="error-message" id="passwordError"></div>
                         </div>
-                        
                         <div class="form-group">
-                            <label class="required-label">Подтверждение пароля</label>
+                            <label class="required-label" data-i18n="confirm-password">Подтверждение пароля</label>
                             <div class="password-group">
                                 <input type="password" id="regConfirmPassword" placeholder="Повторите пароль">
                                 <button type="button" class="password-toggle" onclick="togglePasswordVisibility('regConfirmPassword', this)">👁️</button>
@@ -170,21 +159,89 @@
                             <div class="error-message" id="confirmError"></div>
                         </div>
                     </div>
-                    
                     <div class="agreement">
                         <label>
                             <input type="checkbox" id="agreement">
-                            Я принимаю <a href="#">Соглашение пользователя</a>
+                            <span data-i18n="agreement">Я принимаю</span> <a href="#" data-i18n="user-agreement">Соглашение пользователя</a>
                         </label>
                         <div class="error-message" id="agreementError"></div>
                     </div>
-                    
-                    <button type="submit" class="submit-btn" id="registerSubmitBtn" disabled>Зарегистрироваться</button>
+                    <button type="submit" class="submit-btn" id="registerSubmitBtn" disabled data-i18n="register-btn">Зарегистрироваться</button>
                 </form>
             </div>
         </div>
     </div>
 
     <script src="../js/auth.js"></script>
+    <script src="../js/translations.js"></script>
+    <script src="../js/theme.js"></script>
+    <script src="../js/features.js"></script>
+    
+    <script>
+        window.togglePasswordVisibility = function(inputId, btn) {
+            const input = document.getElementById(inputId);
+            if (input.type === 'password') {
+                input.type = 'text';
+                btn.textContent = '🙈';
+            } else {
+                input.type = 'password';
+                btn.textContent = '👁️';
+            }
+        };
+        
+        function checkAdminMenu() {
+            const savedUser = localStorage.getItem('currentUser');
+            const adminMenuItem = document.getElementById('adminMenuItem');
+            if (savedUser) {
+                const user = JSON.parse(savedUser);
+                if (user.role === 'admin') {
+                    if (adminMenuItem) adminMenuItem.style.display = 'block';
+                } else {
+                    if (adminMenuItem) adminMenuItem.style.display = 'none';
+                }
+            } else {
+                if (adminMenuItem) adminMenuItem.style.display = 'none';
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            checkAdminMenu();
+        });
+    </script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const savedTab = localStorage.getItem('authTab');
+        
+        if (savedTab === 'register') {
+            const registerTab = document.getElementById('registerTab');
+            const loginTab = document.getElementById('loginTab');
+            const loginForm = document.getElementById('loginForm');
+            const registerForm = document.getElementById('registerForm');
+            
+            if (registerTab && loginTab) {
+                registerTab.classList.add('active');
+                loginTab.classList.remove('active');
+            }
+            if (loginForm) loginForm.style.display = 'none';
+            if (registerForm) registerForm.style.display = 'block';
+            
+            localStorage.removeItem('authTab');
+        } else {
+            const loginTab = document.getElementById('loginTab');
+            const registerTab = document.getElementById('registerTab');
+            const loginForm = document.getElementById('loginForm');
+            const registerForm = document.getElementById('registerForm');
+            
+            if (loginTab && registerTab) {
+                loginTab.classList.add('active');
+                registerTab.classList.remove('active');
+            }
+            if (loginForm) loginForm.style.display = 'block';
+            if (registerForm) registerForm.style.display = 'none';
+            
+            localStorage.removeItem('authTab');
+        }
+    });
+</script>
 </body>
 </html>

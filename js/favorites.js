@@ -1,5 +1,20 @@
 const API_URL = 'http://localhost:3000';
 
+function getCurrentLanguage() {
+    return localStorage.getItem('language') || 'en';
+}
+
+function getTranslatedValue(obj, lang = null) {
+    const currentLang = lang || getCurrentLanguage();
+    
+    if (!obj) return '';
+    if (typeof obj === 'string') return obj;
+    if (typeof obj === 'object' && obj[currentLang]) return obj[currentLang];
+    if (typeof obj === 'object' && obj['en']) return obj['en'];
+    
+    return String(obj);
+}
+
 function getImagePath(imagePath) {
     if (!imagePath) return '../assets/images/chair.png';
     if (imagePath.startsWith('http')) return imagePath;
@@ -19,17 +34,31 @@ function generateStars(rating) {
     return stars;
 }
 
-function getCategoryLabel(categoryValue) {
+function getCategoryLabel(categoryValue, lang = null) {
+    const currentLang = lang || getCurrentLanguage();
+    
     const categories = {
-        'sofa': 'Диваны',
-        'living': 'Гостиная',
-        'kitchen': 'Кухня',
-        'bedroom': 'Спальня',
-        'bathroom': 'Ванная',
-        'decor': 'Декор',
-        'ceramics': 'Керамика'
+        'en': {
+            'sofa': 'Sofas',
+            'living': 'Living Room',
+            'kitchen': 'Kitchen',
+            'bedroom': 'Bedroom',
+            'bathroom': 'Bathroom',
+            'decor': 'Decor',
+            'ceramics': 'Ceramics'
+        },
+        'ru': {
+            'sofa': 'Диваны',
+            'living': 'Гостиная',
+            'kitchen': 'Кухня',
+            'bedroom': 'Спальня',
+            'bathroom': 'Ванная',
+            'decor': 'Декор',
+            'ceramics': 'Керамика'
+        }
     };
-    return categories[categoryValue] || categoryValue;
+    
+    return categories[currentLang]?.[categoryValue] || categoryValue;
 }
 
 function showMessage(message, isError = false) {
@@ -66,11 +95,16 @@ async function loadFavorites() {
         const favorites = await response.json();
         
         if (!favorites || favorites.length === 0) {
+            const currentLang = getCurrentLanguage();
+            const emptyTitle = currentLang === 'ru' ? '😔 В избранном пока пусто' : '😔 Favorites is empty';
+            const emptyText = currentLang === 'ru' ? 'Добавляйте товары в избранное, чтобы они появились здесь' : 'Add items to favorites to see them here';
+            const goToCatalogText = currentLang === 'ru' ? 'Перейти в каталог' : 'Go to catalog';
+            
             container.innerHTML = `
                 <div class="empty-favorites">
-                    <h2>😔 В избранном пока пусто</h2>
-                    <p>Добавляйте товары в избранное, чтобы они появились здесь</p>
-                    <a href="catalog.html" class="back-link">Перейти в каталог</a>
+                    <h2>${emptyTitle}</h2>
+                    <p>${emptyText}</p>
+                    <a href="catalog.html" class="back-link" data-i18n="go-to-catalog">${goToCatalogText}</a>
                 </div>
             `;
             return;
@@ -84,26 +118,33 @@ async function loadFavorites() {
         );
         
         const products = await Promise.all(productPromises);
+        const currentLang = getCurrentLanguage();
         
-        container.innerHTML = products.map(product => `
-            <div class="favorite-card" data-id="${product.id}">
-                <div class="card-image">
-                    <img src="${getImagePath(product.image)}" alt="${product.name}" onerror="this.src='../assets/images/chair.png'">
-                    <button class="remove-fav-btn" onclick="removeFromFavorites(${product.id})" title="Удалить из избранного">
-                        🗑️
-                    </button>
+        container.innerHTML = products.map(product => {
+            const productName = getTranslatedValue(product.name, currentLang);
+            const categoryName = getCategoryLabel(product.category, currentLang);
+            const stockText = product.inStock ? (currentLang === 'ru' ? '✓ В наличии' : '✓ In stock') : (currentLang === 'ru' ? '✗ Нет в наличии' : '✗ Out of stock');
+            
+            return `
+                <div class="favorite-card" data-id="${product.id}">
+                    <div class="card-image">
+                        <img src="${getImagePath(product.image)}" alt="${escapeHtml(productName)}" onerror="this.src='../assets/images/chair.png'">
+                        <button class="remove-fav-btn" onclick="removeFromFavorites(${product.id})" title="${currentLang === 'ru' ? 'Удалить из избранного' : 'Remove from favorites'}">
+                            🗑️
+                        </button>
+                    </div>
+                    <div class="card-info">
+                        <h3 class="card-title">${escapeHtml(productName)}</h3>
+                        <div class="card-category">${categoryName}</div>
+                        <div class="card-price">£${product.price.toFixed(2)}</div>
+                        <div class="card-rating">${generateStars(product.rating)}</div>
+                        <span class="card-stock ${product.inStock ? 'in-stock' : 'out-stock'}">
+                            ${stockText}
+                        </span>
+                    </div>
                 </div>
-                <div class="card-info">
-                    <h3 class="card-title">${escapeHtml(product.name)}</h3>
-                    <div class="card-category">${getCategoryLabel(product.category)}</div>
-                    <div class="card-price">£${product.price.toFixed(2)}</div>
-                    <div class="card-rating">${generateStars(product.rating)}</div>
-                    <span class="card-stock ${product.inStock ? 'in-stock' : 'out-stock'}">
-                        ${product.inStock ? '✓ В наличии' : '✗ Нет в наличии'}
-                    </span>
-                </div>
-            </div>
-        `).join('');
+            `;
+        }).join('');
         
     } catch (error) {
         console.error('Ошибка загрузки избранного:', error);
@@ -111,11 +152,16 @@ async function loadFavorites() {
         
         const container = document.getElementById('favoritesContainer');
         if (container) {
+            const currentLang = getCurrentLanguage();
+            const errorTitle = currentLang === 'ru' ? '⚠️ Ошибка загрузки' : '⚠️ Loading error';
+            const errorText = currentLang === 'ru' ? 'Не удалось загрузить избранное. Убедитесь, что сервер запущен.' : 'Failed to load favorites. Make sure the server is running.';
+            const goToCatalogText = currentLang === 'ru' ? 'Перейти в каталог' : 'Go to catalog';
+            
             container.innerHTML = `
                 <div class="empty-favorites">
-                    <h2>⚠️ Ошибка загрузки</h2>
-                    <p>Не удалось загрузить избранное. Убедитесь, что сервер запущен.</p>
-                    <a href="catalog.html" class="back-link">Перейти в каталог</a>
+                    <h2>${errorTitle}</h2>
+                    <p>${errorText}</p>
+                    <a href="catalog.html" class="back-link">${goToCatalogText}</a>
                 </div>
             `;
         }
@@ -144,7 +190,9 @@ async function removeFromFavorites(productId) {
             body: JSON.stringify({ isFavorite: false })
         });
         
-        showMessage('❤️ Товар удален из избранного');
+        const currentLang = getCurrentLanguage();
+        const removeMessage = currentLang === 'ru' ? '❤️ Товар удален из избранного' : '❤️ Item removed from favorites';
+        showMessage(removeMessage);
         loadFavorites();
         
     } catch (error) {
@@ -183,4 +231,10 @@ function checkAdminAccessForMenu() {
 document.addEventListener('DOMContentLoaded', () => {
     checkAdminAccessForMenu();
     loadFavorites();
+});
+
+window.addEventListener('storage', (event) => {
+    if (event.key === 'language') {
+        loadFavorites();
+    }
 });

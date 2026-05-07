@@ -6,50 +6,51 @@
     <title>Админ-панель - Greenery</title>
     <link rel="stylesheet" href="../css/features.css">
     <link rel="stylesheet" href="../css/admin.css">
+    <link rel="stylesheet" href="../css/themes.css">
+    <link rel="stylesheet" href="../css/profile.css">
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🌿%3C/text%3E%3C/svg%3E">
 </head>
 <body>
     <div class="vertical-line">
         <div class="logo-container">
-            <img src="../assets/icons/logo.png" alt="logo">
+            <img src="../assets/icons/logo.png" alt="logo" data-theme-img data-light-src="../assets/icons/logo.png" data-dark-src="../assets/icons/logo.png">
         </div>
         <nav class="menu-container">
             <div class="menu-item home-item">
                 <a href="../index.html">
                     <img src="../assets/icons/home.png" alt="home">
-                    <span>Home</span>
+                    <span data-i18n="home">Home</span>
                 </a>
             </div>
             <div class="menu-item shop-item">
                 <a href="catalog.html">
                     <img src="../assets/icons/shop.png" alt="shop">
-                    <span>Shop</span>
+                    <span data-i18n="shop">Shop</span>
                 </a>
             </div>
             <div class="menu-item">
                 <a href="favorites.html">
                     <img src="../assets/icons/heart.png" alt="favorites">
-                    <span>Favorites</span>
+                    <span data-i18n="favorites">Favorites</span>
                 </a>
             </div>
             <div class="menu-item">
                 <a href="feedback.html">
                     <img src="../assets/icons/blog.png" alt="reviews">
-                    <span>Reviews</span>
+                    <span data-i18n="reviews">Reviews</span>
                 </a>
             </div>
             <div class="menu-item">
                 <a href="cart.html">
                     <img src="../assets/icons/cart.png" alt="cart">
-                    <span>Cart</span>
+                    <span data-i18n="cart">Cart</span>
                 </a>
             </div>
-
             <div class="menu-item" id="adminMenuItem" style="display: block;">
                 <div class="active-indicator"></div>
                 <a href="admin.html">
                     <img src="../assets/icons/admin.png" alt="admin">
-                    <span>Admin</span>
+                    <span data-i18n="admin">Admin</span>
                 </a>
             </div>
         </nav>
@@ -57,61 +58,59 @@
 
     <div class="main-content">
         <div class="catalog-header">
-            <h1>👑 Админ-панель</h1>
-            <p>Управление товарами и отзывами</p>
-            <a href="catalog.html" class="back-link">← Вернуться в каталог</a>
+            <h1 data-i18n="admin-panel">👑 Админ-панель</h1>
+            <p data-i18n="admin-subtitle">Управление товарами и отзывами</p>
+            <a href="catalog.html" class="back-link" data-i18n="back-to-catalog">← Вернуться в каталог</a>
         </div>
 
         <div id="accessDenied" class="access-denied" style="display: none;">
-            <h2>⛔ Доступ запрещен</h2>
-            <p>Эта страница доступна только администраторам.</p>
-            <a href="catalog.html" class="back-link">Вернуться в каталог</a>
+            <h2 data-i18n="access-denied">⛔ Доступ запрещен</h2>
+            <p data-i18n="access-denied-text">Эта страница доступна только администраторам.</p>
+            <a href="catalog.html" class="back-link" data-i18n="back-to-catalog">Вернуться в каталог</a>
         </div>
 
         <div id="adminContent" style="display: none;">
             <div class="admin-section">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; flex-wrap: wrap; gap: 15px;">
-                    <h2>📦 Управление товарами</h2>
-                    <button class="add-product-btn" id="openAddProductModalBtn">➕ Добавить товар</button>
+                    <h2 data-i18n="products-management">📦 Управление товарами</h2>
+                    <button class="add-product-btn" id="openAddProductModalBtn" data-i18n="add-product">➕ Добавить товар</button>
                 </div>
-
                 <div class="products-list">
-                    <h3>Список товаров</h3>
+                    <h3 data-i18n="product-list">Список товаров</h3>
                     <div class="search-box">
-                        <input type="text" id="searchProduct" placeholder="🔍 Поиск товаров...">
+                        <input type="text" id="searchProduct" data-i18n="search-products" placeholder="🔍 Поиск товаров...">
                     </div>
                     <div id="productsContainer" class="products-table-container">
-                        <div class="loading">Загрузка товаров...</div>
+                        <div class="loading" data-i18n="loading-data">Загрузка товаров...</div>
                     </div>
                 </div>
             </div>
-
             <div class="admin-section">
-                <h2>💬 Управление отзывами</h2>
-                
+                <h2 data-i18n="reviews-management">💬 Управление отзывами</h2>
                 <div class="reviews-filters">
                     <div class="form-group">
-                        <label>Фильтр по товару</label>
+                        <label data-i18n="filter-by-product">Фильтр по товару</label>
                         <select id="adminFilterProduct">
-                            <option value="all">Все товары</option>
+                            <option value="all" data-i18n="all-products-filter">Все товары</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label>Фильтр по пользователю</label>
+                        <label data-i18n="filter-by-user">Фильтр по пользователю</label>
                         <select id="adminFilterUser">
-                            <option value="all">Все пользователи</option>
+                            <option value="all" data-i18n="all-users">Все пользователи</option>
                         </select>
                     </div>
-                    <button id="applyFiltersBtn" class="filter-btn">🔍 Применить фильтры</button>
+                    <button id="applyFiltersBtn" class="filter-btn" data-i18n="apply-filters">🔍 Применить фильтры</button>
                 </div>
-
                 <div id="reviewsContainer" class="reviews-list-container">
-                    <div class="loading">Загрузка отзывов...</div>
+                    <div class="loading" data-i18n="loading-data">Загрузка отзывов...</div>
                 </div>
             </div>
         </div>
     </div>
 
+    <script src="../js/translations.js"></script>
+    <script src="../js/theme.js"></script>
     <script src="../js/features.js"></script>
     <script src="../js/admin.js"></script>
 </body>
