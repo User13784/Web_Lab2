@@ -651,9 +651,32 @@
         }
     }
     
+    function initBurgerMenu() {
+        if (window.innerWidth <= 1200 && typeof BurgerMenu !== 'undefined') {
+            if (!window.burgerMenuInstance) {
+                window.burgerMenuInstance = new BurgerMenu();
+            }
+        }
+    }
+    
     document.addEventListener('DOMContentLoaded', () => {
         updateCartCount();
         checkAuth();
+        initBurgerMenu();
+    });
+    
+    window.addEventListener('resize', () => {
+        if (window.innerWidth <= 1200 && !window.burgerMenuInstance) {
+            initBurgerMenu();
+        } else if (window.innerWidth > 1200 && window.burgerMenuInstance) {
+            const burger = document.querySelector('.burger-menu');
+            const mobileMenu = document.querySelector('.mobile-menu');
+            const overlay = document.querySelector('.mobile-overlay');
+            if (burger) burger.remove();
+            if (mobileMenu) mobileMenu.remove();
+            if (overlay) overlay.remove();
+            window.burgerMenuInstance = null;
+        }
     });
 </script>
 

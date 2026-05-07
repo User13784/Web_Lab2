@@ -778,3 +778,81 @@ body.menu-open {
         padding: 8px 15px;
     }
 }
+
+.auth-error-container {
+    margin: 15px 20px;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-size: 14px;
+    text-align: center;
+}
+
+.auth-error-message {
+    margin: 15px 20px;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-size: 14px;
+    text-align: center;
+}
+
+.auth-error-message.error {
+    background: #ffe6e6;
+    color: #c62828;
+    border: 1px solid #c62828;
+}
+
+.auth-error-message.success {
+    background: #e6f7e6;
+    color: #2e7d32;
+    border: 1px solid #2e7d32;
+}
+
+.auth-error-message.info {
+    background: #e6f3f7;
+    color: #264A51;
+    border: 1px solid #264A51;
+}
+
+.dark-theme .auth-error-message.error {
+    background: #442222;
+    color: #ff6b6b;
+    border-color: #ff6b6b;
+}
+
+.dark-theme .auth-error-message.success {
+    background: #224422;
+    color: #6bff6b;
+    border-color: #6bff6b;
+}
+
+.dark-theme .auth-error-message.info {
+    background: #223344;
+    color: #88bbcc;
+    border-color: #88bbcc;
+}
+
+#loginError,
+#registerError {
+    margin-top: -10px;
+    margin-bottom: 15px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    text-align: center;
+    background: #ffe6e6;
+    color: #c62828;
+    border: 1px solid #c62828;
+    display: none;
+}
+
+#loginError.show,
+#registerError.show {
+    display: block;
+}
+
+.dark-theme #loginError,
+.dark-theme #registerError {
+    background: #442222;
+    color: #ff6b6b;
+    border-color: #ff6b6b;
+}

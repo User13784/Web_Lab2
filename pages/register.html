@@ -67,20 +67,23 @@
                 <button class="tab-btn" id="registerTab" data-i18n="register-tab">Регистрация</button>
             </div>
             
+            <div id="authErrorMessage" class="auth-error-container" style="display: none;"></div>
+            
             <div id="loginForm" class="auth-form">
                 <form id="loginFormContent">
                     <div class="form-group">
                         <label class="required-label" data-i18n="email">Email</label>
-                        <input type="email" id="loginEmail" placeholder="example@mail.com">
+                        <input type="email" id="loginEmail" placeholder="example@mail.com" data-i18n="email-placeholder">
                     </div>
                     <div class="form-group">
                         <label class="required-label" data-i18n="password">Пароль</label>
                         <div class="password-group">
-                            <input type="password" id="loginPassword" placeholder="Введите пароль">
+                            <input type="password" id="loginPassword" placeholder="Введите пароль" data-i18n="password-placeholder">
                             <button type="button" class="password-toggle" onclick="togglePasswordVisibility('loginPassword', this)">👁️</button>
                         </div>
                     </div>
-                    <button type="submit" class="submit-btn" data-i18n="login-btn">Войти</button>
+                    <div class="error-message" id="loginError"></div>
+                    <button type="submit" class="submit-btn" id="loginSubmitBtn" data-i18n="login-btn">Войти</button>
                 </form>
             </div>
             
@@ -88,12 +91,12 @@
                 <form id="registerFormContent">
                     <div class="form-group">
                         <label class="required-label" data-i18n="phone">Номер телефона (РБ)</label>
-                        <input type="tel" id="regPhone" placeholder="+375291234567">
+                        <input type="tel" id="regPhone" placeholder="+375291234567" data-i18n="phone-placeholder">
                         <div class="error-message" id="phoneError"></div>
                     </div>
                     <div class="form-group">
                         <label class="required-label" data-i18n="email">Email</label>
-                        <input type="email" id="regEmail" placeholder="example@mail.com">
+                        <input type="email" id="regEmail" placeholder="example@mail.com" data-i18n="email-placeholder">
                         <div class="error-message" id="emailError"></div>
                     </div>
                     <div class="form-group">
@@ -103,22 +106,22 @@
                     </div>
                     <div class="form-group">
                         <label class="required-label" data-i18n="firstname">Имя</label>
-                        <input type="text" id="regFirstName" placeholder="Иван">
+                        <input type="text" id="regFirstName" placeholder="Иван" data-i18n="firstname-placeholder">
                         <div class="error-message" id="firstNameError"></div>
                     </div>
                     <div class="form-group">
                         <label class="required-label" data-i18n="lastname">Фамилия</label>
-                        <input type="text" id="regLastName" placeholder="Петров">
+                        <input type="text" id="regLastName" placeholder="Петров" data-i18n="lastname-placeholder">
                         <div class="error-message" id="lastNameError"></div>
                     </div>
                     <div class="form-group">
                         <label data-i18n="patronymic">Отчество (необязательно)</label>
-                        <input type="text" id="regPatronymic" placeholder="Иванович">
+                        <input type="text" id="regPatronymic" placeholder="Иванович" data-i18n="patronymic-placeholder">
                     </div>
                     <div class="form-group">
                         <label class="required-label" data-i18n="nickname">Никнейм</label>
                         <div class="nickname-wrapper">
-                            <input type="text" id="regNickname" readonly placeholder="Будет сгенерирован автоматически">
+                            <input type="text" id="regNickname" readonly placeholder="Будет сгенерирован автоматически" data-i18n="nickname-auto-placeholder">
                             <button type="button" class="generate-btn" id="generateNicknameBtn" data-i18n="generate">🎲 Сгенерировать</button>
                         </div>
                         <div class="attempts-info" id="attemptsInfo" data-i18n="attempts-left">Осталось попыток генерации: 5</div>
@@ -144,7 +147,7 @@
                         <div class="form-group">
                             <label class="required-label" data-i18n="password">Пароль</label>
                             <div class="password-group">
-                                <input type="password" id="regPassword" placeholder="Введите пароль">
+                                <input type="password" id="regPassword" placeholder="Введите пароль" data-i18n="password-placeholder">
                                 <button type="button" class="password-toggle" onclick="togglePasswordVisibility('regPassword', this)">👁️</button>
                             </div>
                             <div class="password-hint" data-i18n="password-hint">Пароль должен содержать: минимум 8 символов, заглавную и строчную буквы, цифру и спецсимвол</div>
@@ -153,7 +156,7 @@
                         <div class="form-group">
                             <label class="required-label" data-i18n="confirm-password">Подтверждение пароля</label>
                             <div class="password-group">
-                                <input type="password" id="regConfirmPassword" placeholder="Повторите пароль">
+                                <input type="password" id="regConfirmPassword" placeholder="Повторите пароль" data-i18n="confirm-password-placeholder">
                                 <button type="button" class="password-toggle" onclick="togglePasswordVisibility('regConfirmPassword', this)">👁️</button>
                             </div>
                             <div class="error-message" id="confirmError"></div>
@@ -172,10 +175,10 @@
         </div>
     </div>
 
-    <script src="../js/auth.js"></script>
     <script src="../js/translations.js"></script>
     <script src="../js/theme.js"></script>
     <script src="../js/features.js"></script>
+    <script src="../js/auth.js"></script>
     
     <script>
         window.togglePasswordVisibility = function(inputId, btn) {
@@ -204,44 +207,82 @@
             }
         }
         
+        function forceTranslateButtons() {
+            const currentLang = localStorage.getItem('language') || 'en';
+            
+            const loginBtn = document.getElementById('loginSubmitBtn');
+            if (loginBtn) {
+                loginBtn.textContent = currentLang === 'ru' ? 'Войти' : 'Login';
+            }
+            
+            const registerBtn = document.getElementById('registerSubmitBtn');
+            if (registerBtn) {
+                registerBtn.textContent = currentLang === 'ru' ? 'Зарегистрироваться' : 'Register';
+            }
+            
+            const generateBtn = document.getElementById('generateNicknameBtn');
+            if (generateBtn) {
+                generateBtn.textContent = currentLang === 'ru' ? '🎲 Сгенерировать' : '🎲 Generate';
+            }
+            
+            const loginTab = document.getElementById('loginTab');
+            if (loginTab) {
+                loginTab.textContent = currentLang === 'ru' ? 'Вход' : 'Login';
+            }
+            
+            const registerTab = document.getElementById('registerTab');
+            if (registerTab) {
+                registerTab.textContent = currentLang === 'ru' ? 'Регистрация' : 'Register';
+            }
+        }
+        
         document.addEventListener('DOMContentLoaded', () => {
             checkAdminMenu();
+            forceTranslateButtons();
+            
+            const savedTab = localStorage.getItem('authTab');
+            
+            if (savedTab === 'register') {
+                const registerTab = document.getElementById('registerTab');
+                const loginTab = document.getElementById('loginTab');
+                const loginForm = document.getElementById('loginForm');
+                const registerForm = document.getElementById('registerForm');
+                
+                if (registerTab && loginTab) {
+                    registerTab.classList.add('active');
+                    loginTab.classList.remove('active');
+                }
+                if (loginForm) loginForm.style.display = 'none';
+                if (registerForm) registerForm.style.display = 'block';
+                
+                localStorage.removeItem('authTab');
+            } else {
+                const loginTab = document.getElementById('loginTab');
+                const registerTab = document.getElementById('registerTab');
+                const loginForm = document.getElementById('loginForm');
+                const registerForm = document.getElementById('registerForm');
+                
+                if (loginTab && registerTab) {
+                    loginTab.classList.add('active');
+                    registerTab.classList.remove('active');
+                }
+                if (loginForm) loginForm.style.display = 'block';
+                if (registerForm) registerForm.style.display = 'none';
+                
+                localStorage.removeItem('authTab');
+            }
+        });
+        
+        window.addEventListener('storage', function(event) {
+            if (event.key === 'language') {
+                setTimeout(function() {
+                    if (window.translatePage) {
+                        window.translatePage(event.newValue);
+                    }
+                    forceTranslateButtons();
+                }, 100);
+            }
         });
     </script>
-    <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const savedTab = localStorage.getItem('authTab');
-        
-        if (savedTab === 'register') {
-            const registerTab = document.getElementById('registerTab');
-            const loginTab = document.getElementById('loginTab');
-            const loginForm = document.getElementById('loginForm');
-            const registerForm = document.getElementById('registerForm');
-            
-            if (registerTab && loginTab) {
-                registerTab.classList.add('active');
-                loginTab.classList.remove('active');
-            }
-            if (loginForm) loginForm.style.display = 'none';
-            if (registerForm) registerForm.style.display = 'block';
-            
-            localStorage.removeItem('authTab');
-        } else {
-            const loginTab = document.getElementById('loginTab');
-            const registerTab = document.getElementById('registerTab');
-            const loginForm = document.getElementById('loginForm');
-            const registerForm = document.getElementById('registerForm');
-            
-            if (loginTab && registerTab) {
-                loginTab.classList.add('active');
-                registerTab.classList.remove('active');
-            }
-            if (loginForm) loginForm.style.display = 'block';
-            if (registerForm) registerForm.style.display = 'none';
-            
-            localStorage.removeItem('authTab');
-        }
-    });
-</script>
 </body>
 </html>

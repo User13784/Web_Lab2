@@ -76,7 +76,7 @@
             </div>
             <div class="menu-item" id="adminMenuItem" style="display: none;">
                 <a href="admin.html">
-                    <img src="../assets/icons/settings.png" alt="admin">
+                    <img src="../assets/icons/admin.png" alt="admin">
                     <span data-i18n="admin">Admin</span>
                 </a>
             </div>
@@ -147,8 +147,17 @@
     </div>
 
     <script src="../js/translations.js"></script>
-    <script src="../js/theme.js"></script>
-    <script src="../js/features.js"></script>
-    <script src="../js/catalog.js"></script>
+<script src="../js/theme.js"></script>
+<script src="../js/features.js"></script>
+<script src="../js/catalog.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        if (window.innerWidth <= 1200 && typeof BurgerMenu !== 'undefined') {
+            if (!window.burgerMenuInstance) {
+                window.burgerMenuInstance = new BurgerMenu();
+            }
+        }
+    });
+</script>
 </body>
 </html>

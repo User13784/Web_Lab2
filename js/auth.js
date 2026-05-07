@@ -1,5 +1,21 @@
+
 const API_URL = 'http://localhost:3000';
 const USER_STORAGE_KEY = 'currentUser';
+
+function getCurrentLanguage() {
+    return localStorage.getItem('language') || 'en';
+}
+
+function translateErrorMessage(key, params = {}) {
+    const currentLang = getCurrentLanguage();
+    let message = i18Obj[currentLang]?.[key] || i18Obj['en'][key] || key;
+    
+    Object.keys(params).forEach(param => {
+        message = message.replace(`{{${param}}}`, params[param]);
+    });
+    
+    return message;
+}
 
 function saveUserToStorage(user) {
     localStorage.setItem(USER_STORAGE_KEY, JSON.stringify({
@@ -43,7 +59,7 @@ function updateAuthUI() {
             const logoutButton = document.createElement('button');
             logoutButton.className = 'logout-btn';
             logoutButton.innerHTML = '🚪';
-            logoutButton.title = 'Выйти';
+            logoutButton.title = translateErrorMessage('logout');
             logoutButton.style.cssText = `
                 margin-left: 5px;
                 background: none;
@@ -73,13 +89,13 @@ async function loginUser(email, password) {
         const users = await response.json();
         
         if (users.length === 0) {
-            ToastManager.show('Пользователь с таким email не найден', 'error');
+            showErrorMessageOnForm('loginError', 'user-not-found');
             return false;
         }
         
         const user = users[0];
         if (user.password !== password) {
-            ToastManager.show('Неверный пароль', 'error');
+            showErrorMessageOnForm('loginError', 'wrong-password');
             return false;
         }
         
@@ -91,23 +107,141 @@ async function loginUser(email, password) {
         if (savedTheme) applyTheme(savedTheme);
         if (savedLang) translatePage(savedLang);
         
-        ToastManager.show(`Добро пожаловать, ${user.firstName}!`, 'success');
+        const errorContainer = document.getElementById('authErrorMessage');
+        if (errorContainer) {
+            const welcomeMsg = translateErrorMessage('welcome', { name: user.firstName });
+            errorContainer.textContent = welcomeMsg;
+            errorContainer.style.display = 'block';
+            errorContainer.className = 'auth-error-message success';
+        }
         
         setTimeout(() => {
             if (user.role === 'admin') {
-                window.location.href = 'pages/admin.html';
+                window.location.href = '../pages/admin.html';
             } else {
-                window.location.href = 'pages/catalog.html';
+                window.location.href = '../pages/catalog.html';
             }
         }, 1500);
         
         return true;
     } catch (error) {
         console.error('Ошибка авторизации:', error);
-        ToastManager.show('Ошибка сервера', 'error');
+        showErrorMessageOnForm('loginError', 'server-error');
         return false;
     }
 }
+
+function showMessage(messageKey, type = 'info', params = {}) {
+    const errorContainer = document.getElementById('authErrorMessage');
+    
+    if (errorContainer) {
+        const translatedMessage = translateErrorMessage(messageKey, params);
+        errorContainer.textContent = translatedMessage;
+        errorContainer.style.display = 'block';
+        errorContainer.className = `auth-error-message ${type === 'error' ? 'error' : (type === 'success' ? 'success' : 'info')}`;
+        
+        setTimeout(() => {
+            if (errorContainer) {
+                errorContainer.style.display = 'none';
+            }
+        }, 4000);
+    } else {
+        console.log(`${type}: ${translateErrorMessage(messageKey, params)}`);
+    }
+}
+
+async function loginUser(email, password) {
+    try {
+        const response = await fetch(`${API_URL}/users?email=${email}`);
+        const users = await response.json();
+        
+        if (users.length === 0) {
+            showErrorMessageOnForm('loginError', 'user-not-found');
+            return false;
+        }
+        
+        const user = users[0];
+        if (user.password !== password) {
+            showErrorMessageOnForm('loginError', 'wrong-password');
+            return false;
+        }
+        
+        saveUserToStorage(user);
+        
+        const savedTheme = localStorage.getItem(`${user.id}_theme`);
+        const savedLang = localStorage.getItem(`${user.id}_lang`);
+        
+        if (savedTheme) applyTheme(savedTheme);
+        if (savedLang) translatePage(savedLang);
+        
+        const errorContainer = document.getElementById('authErrorMessage');
+        if (errorContainer) {
+            const welcomeMsg = translateErrorMessage('welcome', { name: user.firstName });
+            errorContainer.textContent = welcomeMsg;
+            errorContainer.style.display = 'block';
+            errorContainer.className = 'auth-error-message success';
+        }
+        
+        setTimeout(() => {
+            if (user.role === 'admin') {
+                window.location.href = '../pages/admin.html';
+            } else {
+                window.location.href = '../pages/catalog.html';
+            }
+        }, 1500);
+        
+        return true;
+    } catch (error) {
+        console.error('Ошибка авторизации:', error);
+        showErrorMessageOnForm('loginError', 'server-error');
+        return false;
+    }
+}
+
+function showErrorMessageOnForm(errorId, messageKey, params = {}) {
+    const errorElement = document.getElementById(errorId);
+    if (errorElement) {
+        const translatedMessage = translateErrorMessage(messageKey, params);
+        errorElement.textContent = translatedMessage;
+        errorElement.classList.add('show');
+        
+        setTimeout(() => {
+            if (errorElement) {
+                errorElement.classList.remove('show');
+            }
+        }, 4000);
+    } else {
+        const errorContainer = document.getElementById('authErrorMessage');
+        if (errorContainer) {
+            errorContainer.textContent = translateErrorMessage(messageKey, params);
+            errorContainer.style.display = 'block';
+            errorContainer.className = 'auth-error-message error';
+            setTimeout(() => {
+                errorContainer.style.display = 'none';
+            }, 4000);
+        }
+    }
+}
+
+async function handleLogin(e) {
+    e.preventDefault();
+    
+    const email = document.getElementById('loginEmail').value;
+    const password = document.getElementById('loginPassword').value;
+    
+    const loginError = document.getElementById('loginError');
+    if (loginError) {
+        loginError.classList.remove('show');
+    }
+    
+    if (!email || !password) {
+        showErrorMessageOnForm('loginError', 'fill-fields-error');
+        return;
+    }
+    
+    await loginUser(email, password);
+}
+
 const TOP_PASSWORDS = [
     'password', '123456', '123456789', 'qwerty', 'password123', '12345678', '111111',
     '12345', '1234567890', 'qwerty123', 'abc123', 'admin', 'iloveyou', 'welcome',
@@ -135,16 +269,23 @@ let currentFormValidity = {
     isNicknameUnique: false
 };
 
-function showMessage(message, type = 'info') {
-    const existingMsg = document.querySelector('.message-popup');
-    if (existingMsg) existingMsg.remove();
+function showMessage(messageKey, type = 'info', params = {}) {
+    const errorContainer = document.getElementById('authErrorMessage');
     
-    const msg = document.createElement('div');
-    msg.className = `message-popup ${type === 'error' ? 'error' : (type === 'success' ? 'success' : '')}`;
-    msg.textContent = message;
-    document.body.appendChild(msg);
-    
-    setTimeout(() => msg.remove(), 3000);
+    if (errorContainer) {
+        const translatedMessage = translateErrorMessage(messageKey, params);
+        errorContainer.textContent = translatedMessage;
+        errorContainer.style.display = 'block';
+        errorContainer.className = `auth-error-message ${type === 'error' ? 'error' : (type === 'success' ? 'success' : 'info')}`;
+        
+        setTimeout(() => {
+            if (errorContainer) {
+                errorContainer.style.display = 'none';
+            }
+        }, 4000);
+    } else {
+        console.log(`${type}: ${translateErrorMessage(messageKey, params)}`);
+    }
 }
 
 function validatePhone(phone) {
@@ -192,7 +333,7 @@ function updateAgeHint() {
     if (!birthDate) {
         const hint = document.createElement('div');
         hint.className = 'age-hint info';
-        hint.innerHTML = 'ℹ️ <strong>Минимальный возраст для регистрации: 16 лет</strong>';
+        hint.innerHTML = translateErrorMessage('age-hint-info');
         birthDateInput?.parentNode.appendChild(hint);
         return;
     }
@@ -204,10 +345,10 @@ function updateAgeHint() {
         
         if (age >= 16) {
             hint.className = 'age-hint success';
-            hint.innerHTML = `✅ <strong>Возраст: ${age} лет</strong> - соответствует требованиям`;
+            hint.innerHTML = translateErrorMessage('age-hint-success', { age: age });
         } else {
             hint.className = 'age-hint warning';
-            hint.innerHTML = `⚠️ <strong>Возраст: ${age} лет</strong> - требуется не менее 16 лет`;
+            hint.innerHTML = translateErrorMessage('age-hint-warning', { age: age });
         }
         
         birthDateInput?.parentNode.appendChild(hint);
@@ -324,10 +465,11 @@ async function checkPhoneUnique(phone) {
     }
 }
 
-function showFieldError(errorId, message) {
+function showFieldError(errorId, messageKey, params = {}) {
     const errorEl = document.getElementById(errorId);
     if (errorEl) {
-        errorEl.textContent = message;
+        const translatedMessage = translateErrorMessage(messageKey, params);
+        errorEl.textContent = translatedMessage;
         errorEl.classList.add('show');
     }
 }
@@ -368,11 +510,7 @@ async function checkNicknameUniqueness(nickname) {
     currentFormValidity.isNicknameUnique = isUnique;
     
     if (!isUnique) {
-        const nicknameError = document.getElementById('nicknameError');
-        if (nicknameError) {
-            nicknameError.textContent = 'Такой никнейм уже существует, попробуйте другой';
-            nicknameError.classList.add('show');
-        }
+        showFieldError('nicknameError', 'nickname-exists');
         document.getElementById('regNickname')?.classList.add('error');
         currentFormValidity.isNicknameValid = false;
     } else {
@@ -395,7 +533,7 @@ function restrictNicknameInput() {
         
         if (originalValue !== filteredValue) {
             this.value = filteredValue;
-            showFieldError('nicknameError', 'Никнейм может содержать только английские буквы (A-Z, a-z), цифры (0-9) и символы _, -, .');
+            showFieldError('nicknameError', 'nickname-error');
             currentFormValidity.isNicknameValid = false;
         } else {
             hideFieldError('nicknameError');
@@ -428,7 +566,7 @@ function validateRegistrationFormSync() {
     let isValid = true;
     
     if (!validatePhone(phone)) {
-        showFieldError('phoneError', 'Введите корректный номер телефона РБ (+375XXXXXXXXX или 375XXXXXXXXX)');
+        showFieldError('phoneError', 'phone-error');
         document.getElementById('regPhone')?.classList.add('error');
         currentFormValidity.isPhoneValid = false;
         isValid = false;
@@ -439,7 +577,7 @@ function validateRegistrationFormSync() {
     }
     
     if (!validateEmail(email)) {
-        showFieldError('emailError', 'Введите корректный email адрес');
+        showFieldError('emailError', 'email-error');
         document.getElementById('regEmail')?.classList.add('error');
         currentFormValidity.isEmailValid = false;
         isValid = false;
@@ -450,13 +588,13 @@ function validateRegistrationFormSync() {
     }
     
     if (!birthDate) {
-        showFieldError('birthError', 'Укажите дату рождения');
+        showFieldError('birthError', 'birth-error');
         document.getElementById('regBirthDate')?.classList.add('error');
         currentFormValidity.isBirthValid = false;
         isValid = false;
     } else if (!validateBirthDate(birthDate)) {
         const age = getAgeFromBirthDate(birthDate);
-        showFieldError('birthError', `Вам должно быть не менее 16 лет (сейчас ${age} лет)`);
+        showFieldError('birthError', 'birth-error-age', { age: age });
         document.getElementById('regBirthDate')?.classList.add('error');
         currentFormValidity.isBirthValid = false;
         isValid = false;
@@ -467,7 +605,7 @@ function validateRegistrationFormSync() {
     }
     
     if (!firstName.trim()) {
-        showFieldError('firstNameError', 'Укажите имя');
+        showFieldError('firstNameError', 'firstname-error');
         document.getElementById('regFirstName')?.classList.add('error');
         currentFormValidity.isFirstNameValid = false;
         isValid = false;
@@ -478,7 +616,7 @@ function validateRegistrationFormSync() {
     }
     
     if (!lastName.trim()) {
-        showFieldError('lastNameError', 'Укажите фамилию');
+        showFieldError('lastNameError', 'lastname-error');
         document.getElementById('regLastName')?.classList.add('error');
         currentFormValidity.isLastNameValid = false;
         isValid = false;
@@ -489,27 +627,27 @@ function validateRegistrationFormSync() {
     }
     
     if (!nickname.trim()) {
-        showFieldError('nicknameError', 'Укажите никнейм');
+        showFieldError('nicknameError', 'nickname-min-length');
         document.getElementById('regNickname')?.classList.add('error');
         currentFormValidity.isNicknameValid = false;
         isValid = false;
     } else if (nickname.length < 3) {
-        showFieldError('nicknameError', 'Никнейм должен содержать минимум 3 символа');
+        showFieldError('nicknameError', 'nickname-min-length');
         document.getElementById('regNickname')?.classList.add('error');
         currentFormValidity.isNicknameValid = false;
         isValid = false;
     } else if (nickname.length > 30) {
-        showFieldError('nicknameError', 'Никнейм должен содержать не более 30 символов');
+        showFieldError('nicknameError', 'nickname-max-length');
         document.getElementById('regNickname')?.classList.add('error');
         currentFormValidity.isNicknameValid = false;
         isValid = false;
     } else if (!validateNickname(nickname)) {
-        showFieldError('nicknameError', 'Никнейм может содержать только английские буквы (A-Z, a-z), цифры (0-9) и символы _, -, .');
+        showFieldError('nicknameError', 'nickname-error');
         document.getElementById('regNickname')?.classList.add('error');
         currentFormValidity.isNicknameValid = false;
         isValid = false;
     } else if (!isOnlyEnglishLetters(nickname)) {
-        showFieldError('nicknameError', 'Никнейм может содержать только английские буквы! Русские буквы запрещены.');
+        showFieldError('nicknameError', 'nickname-english-only');
         document.getElementById('regNickname')?.classList.add('error');
         currentFormValidity.isNicknameValid = false;
         isValid = false;
@@ -523,16 +661,7 @@ function validateRegistrationFormSync() {
     if (passwordMethod === 'manual') {
         const validation = validatePassword(password);
         if (!validation.isValid) {
-            let errorText = 'Пароль должен содержать: ';
-            const errors = [];
-            if (validation.errors.minLength) errors.push('минимум 8 символов');
-            if (validation.errors.maxLength) errors.push('не более 20 символов');
-            if (validation.errors.hasUpperCase) errors.push('заглавную букву');
-            if (validation.errors.hasLowerCase) errors.push('строчную букву');
-            if (validation.errors.hasNumber) errors.push('цифру');
-            if (validation.errors.hasSpecial) errors.push('специальный символ');
-            if (validation.errors.notTopPassword) errors.push('не входить в топ-100 паролей');
-            showFieldError('passwordError', errorText + errors.join(', '));
+            showFieldError('passwordError', 'password-error');
             document.getElementById('regPassword')?.classList.add('error');
             currentFormValidity.isPasswordValid = false;
             isValid = false;
@@ -543,7 +672,7 @@ function validateRegistrationFormSync() {
         }
         
         if (password !== confirmPassword) {
-            showFieldError('confirmError', 'Пароли не совпадают');
+            showFieldError('confirmError', 'password-match-error');
             document.getElementById('regConfirmPassword')?.classList.add('error');
             currentFormValidity.isConfirmValid = false;
             isValid = false;
@@ -558,7 +687,7 @@ function validateRegistrationFormSync() {
     }
     
     if (!agreement) {
-        showFieldError('agreementError', 'Необходимо принять Соглашение пользователя');
+        showFieldError('agreementError', 'agreement-error');
         currentFormValidity.isAgreementValid = false;
         isValid = false;
     } else {
@@ -574,19 +703,19 @@ async function registerUser(userData) {
     try {
         const isEmailUnique = await checkEmailUnique(userData.email);
         if (!isEmailUnique) {
-            showMessage('Пользователь с таким email уже существует', 'error');
+            showMessage('email-unique-error', 'error');
             return false;
         }
         
         const isPhoneUnique = await checkPhoneUnique(userData.phone);
         if (!isPhoneUnique) {
-            showMessage('Пользователь с таким номером телефона уже существует', 'error');
+            showMessage('phone-unique-error', 'error');
             return false;
         }
         
         const isNicknameUnique = await checkNicknameUnique(userData.nickname);
         if (!isNicknameUnique) {
-            showMessage('Такой никнейм уже занят, попробуйте другой', 'error');
+            showMessage('nickname-unique-error', 'error');
             return false;
         }
         
@@ -623,7 +752,7 @@ async function registerUser(userData) {
         const savedUser = await response.json();
         console.log('Пользователь успешно сохранен:', savedUser);
         
-        showMessage('Регистрация успешна! Теперь вы можете войти', 'success');
+        showMessage('register-success', 'success');
         
         document.getElementById('registerFormContent')?.reset();
         
@@ -636,7 +765,7 @@ async function registerUser(userData) {
         return true;
     } catch (error) {
         console.error('Ошибка регистрации:', error);
-        showMessage(`Ошибка при регистрации: ${error.message}`, 'error');
+        showMessage('register-error', 'error', { error: error.message });
         return false;
     }
 }
@@ -646,12 +775,12 @@ async function handleRegister(e) {
     
     const isValid = validateRegistrationFormSync();
     if (!isValid) {
-        showMessage('Пожалуйста, исправьте ошибки в форме', 'error');
+        showMessage('fill-fields-error', 'error');
         return;
     }
     
     if (!currentFormValidity.isNicknameUnique) {
-        showMessage('Проверка уникальности никнейма... Подождите или измените никнейм', 'error');
+        showMessage('nickname-unique-error', 'error');
         return;
     }
     
@@ -685,8 +814,14 @@ async function handleLogin(e) {
     const email = document.getElementById('loginEmail').value;
     const password = document.getElementById('loginPassword').value;
     
+    // Очищаем предыдущие ошибки
+    const loginError = document.getElementById('loginError');
+    if (loginError) {
+        loginError.classList.remove('show');
+    }
+    
     if (!email || !password) {
-        showMessage('Заполните все поля', 'error');
+        showErrorMessageOnForm('loginError', 'fill-fields-error');
         return;
     }
     
@@ -760,12 +895,12 @@ async function generateNickname() {
     const lastName = document.getElementById('regLastName').value;
     
     if (!firstName || !lastName) {
-        showMessage('Сначала введите имя и фамилию для генерации никнейма', 'error');
+        showMessage('generate-firstname-lastname', 'error');
         return;
     }
     
     if (generateAttempts >= MAX_GENERATE_ATTEMPTS) {
-        showMessage('Вы исчерпали 5 попыток генерации. Теперь вы можете ввести никнейм вручную', 'error');
+        showMessage('generate-attempts-exhausted', 'error');
         enableManualNicknameInput();
         return;
     }
@@ -775,7 +910,7 @@ async function generateNickname() {
     const attemptsInfo = document.getElementById('attemptsInfo');
     
     if (attemptsInfo) {
-        attemptsInfo.textContent = `Осталось попыток генерации: ${attemptsLeft}`;
+        attemptsInfo.textContent = translateErrorMessage('attempts-left', { attempts: attemptsLeft });
     }
     
     if (generateAttempts >= MAX_GENERATE_ATTEMPTS) {
@@ -788,10 +923,10 @@ async function generateNickname() {
     
     const isUnique = await checkNicknameUnique(newNickname);
     if (!isUnique) {
-        showMessage('Сгенерированный никнейм уже занят, попробуйте еще раз', 'error');
+        showMessage('generate-error', 'error');
         currentFormValidity.isNicknameUnique = false;
     } else {
-        showMessage(`Сгенерирован новый никнейм: ${newNickname}`, 'success');
+        showMessage('generate-success', 'success', { nickname: newNickname });
         currentFormValidity.isNicknameUnique = true;
         currentFormValidity.isNicknameValid = true;
         hideFieldError('nicknameError');
@@ -808,7 +943,7 @@ function enableManualNicknameInput() {
     
     if (nicknameInput) {
         nicknameInput.readOnly = false;
-        nicknameInput.placeholder = 'Введите никнейм вручную (только английские буквы)';
+        nicknameInput.placeholder = translateErrorMessage('nickname-manual-placeholder');
         if (!nicknameInput.value) {
             nicknameInput.value = '';
         }
@@ -818,12 +953,12 @@ function enableManualNicknameInput() {
         generateBtn.disabled = true;
         generateBtn.style.opacity = '0.5';
         generateBtn.style.cursor = 'not-allowed';
-        generateBtn.title = 'Попытки генерации исчерпаны';
+        generateBtn.title = translateErrorMessage('generate-attempts-exhausted');
     }
     
     const attemptsInfo = document.getElementById('attemptsInfo');
     if (attemptsInfo) {
-        attemptsInfo.textContent = '⚠️ Попытки генерации исчерпаны. Введите никнейм вручную (только английские буквы)';
+        attemptsInfo.textContent = translateErrorMessage('attempts-exhausted-warning');
         attemptsInfo.style.color = '#e74c3c';
     }
 }
@@ -837,7 +972,7 @@ function resetGenerateAttempts() {
     
     if (nicknameInput) {
         nicknameInput.readOnly = true;
-        nicknameInput.placeholder = 'Будет сгенерирован автоматически';
+        nicknameInput.placeholder = translateErrorMessage('nickname-auto-placeholder');
         nicknameInput.value = '';
     }
     
@@ -850,7 +985,7 @@ function resetGenerateAttempts() {
     
     const attemptsInfo = document.getElementById('attemptsInfo');
     if (attemptsInfo) {
-        attemptsInfo.textContent = 'Осталось попыток генерации: 5';
+        attemptsInfo.textContent = translateErrorMessage('attempts-left', { attempts: 5 });
         attemptsInfo.style.color = '#5a7c85';
     }
     

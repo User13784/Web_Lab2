@@ -872,3 +872,238 @@ body {
     }
 }
 
+/* Темная тема для админ-панели */
+.dark-theme .vertical-line {
+    background-color: #0a0a0a !important;
+}
+
+.dark-theme .vertical-line::before {
+    background: linear-gradient(to bottom, #555555, #333333) !important;
+}
+
+.dark-theme .menu-item a {
+    color: #e0e0e0 !important;
+}
+
+.dark-theme .menu-item a:hover {
+    background: rgba(85, 85, 85, 0.3) !important;
+}
+
+.dark-theme .menu-item a:hover span {
+    color: #ffffff !important;
+}
+
+.dark-theme .menu-item img {
+    filter: brightness(0) invert(1) !important;
+}
+
+.dark-theme .logo-container img {
+    filter: brightness(0) invert(1) !important;
+}
+
+.dark-theme .active-indicator {
+    background: #888888 !important;
+}
+
+.dark-theme .main-content {
+    background: #1a1a1a !important;
+}
+
+.dark-theme .catalog-header {
+    background: #252525 !important;
+    background: linear-gradient(135deg, #252525 0%, #1a1a1a 100%) !important;
+}
+
+.dark-theme .catalog-header h1 {
+    color: #e8e8e8 !important;
+}
+
+.dark-theme .catalog-header p {
+    color: #aaaaaa !important;
+}
+
+.dark-theme .back-link {
+    background: #3a3a3a !important;
+    color: #e8e8e8 !important;
+}
+
+.dark-theme .back-link:hover {
+    background: #555555 !important;
+}
+
+.dark-theme .admin-section {
+    background: #2a2a2a !important;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3) !important;
+}
+
+.dark-theme .admin-section h2,
+.dark-theme .admin-section h3 {
+    color: #e8e8e8 !important;
+    border-bottom-color: #444444 !important;
+}
+
+.dark-theme .product-form-container {
+    background: #333333 !important;
+}
+
+.dark-theme .form-group label {
+    color: #cccccc !important;
+}
+
+.dark-theme .form-group input,
+.dark-theme .form-group select,
+.dark-theme .form-group textarea,
+.dark-theme .search-box input {
+    background: #3a3a3a !important;
+    border-color: #555555 !important;
+    color: #e8e8e8 !important;
+}
+
+.dark-theme .form-group input:focus,
+.dark-theme .form-group select:focus,
+.dark-theme .form-group textarea:focus,
+.dark-theme .search-box input:focus {
+    border-color: #888888 !important;
+}
+
+.dark-theme .form-group input::placeholder,
+.dark-theme .form-group textarea::placeholder,
+.dark-theme .search-box input::placeholder {
+    color: #888888 !important;
+}
+
+.dark-theme .products-table {
+    background: #2a2a2a !important;
+}
+
+.dark-theme .products-table th {
+    background: #3a3a3a !important;
+    color: #e8e8e8 !important;
+}
+
+.dark-theme .products-table td {
+    color: #cccccc !important;
+    border-bottom-color: #444444 !important;
+}
+
+.dark-theme .products-table tr:hover {
+    background: #333333 !important;
+}
+
+.dark-theme .product-image {
+    background: #3a3a3a !important;
+}
+
+.dark-theme .edit-btn {
+    background: #555555 !important;
+    color: #e8e8e8 !important;
+}
+
+.dark-theme .edit-btn:hover {
+    background: #777777 !important;
+}
+
+.dark-theme .delete-btn {
+    background: #8b3a3a !important;
+    color: #e8e8e8 !important;
+}
+
+.dark-theme .delete-btn:hover {
+    background: #a04444 !important;
+}
+
+.dark-theme .add-product-btn {
+    background: #555555 !important;
+    color: #e8e8e8 !important;
+}
+
+.dark-theme .add-product-btn:hover {
+    background: #777777 !important;
+}
+
+.dark-theme .reviews-filters {
+    background: #333333 !important;
+}
+
+.dark-theme .reviews-filters .form-group label {
+    color: #cccccc !important;
+}
+
+.dark-theme .reviews-filters .form-group select {
+    background: #3a3a3a !important;
+    border-color: #555555 !important;
+    color: #e8e8e8 !important;
+}
+
+.dark-theme .filter-btn {
+    background: #555555 !important;
+    color: #e8e8e8 !important;
+}
+
+.dark-theme .filter-btn:hover {
+    background: #777777 !important;
+}
+
+.dark-theme .review-card {
+    background: #333333 !important;
+}
+
+.dark-theme .review-card:hover {
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3) !important;
+}
+
+.dark-theme .review-user {
+    color: #e8e8e8 !important;
+}
+
+.dark-theme .review-product {
+    color: #aaaaaa !important;
+}
+
+.dark-theme .review-text {
+    color: #cccccc !important;
+}
+
+.dark-theme .review-date {
+    color: #888888 !important;
+}
+
+.dark-theme .delete-review-btn {
+    background: #8b3a3a !important;
+    color: #e8e8e8 !important;
+}
+
+.dark-theme .delete-review-btn:hover {
+    background: #a04444 !important;
+}
+
+.dark-theme .access-denied {
+    background: #2a2a2a !important;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3) !important;
+}
+
+.dark-theme .access-denied h2 {
+    color: #e74c3c !important;
+}
+
+.dark-theme .access-denied p {
+    color: #aaaaaa !important;
+}
+
+.dark-theme .loading,
+.dark-theme .no-data {
+    color: #aaaaaa !important;
+}
+
+.dark-theme .message-popup {
+    background: #3a3a3a !important;
+    color: #e8e8e8 !important;
+}
+
+.dark-theme .message-popup.error {
+    background: #8b3a3a !important;
+}
+
+.dark-theme .message-popup.success {
+    background: #2e7d32 !important;
+}

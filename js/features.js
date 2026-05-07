@@ -61,6 +61,8 @@ class ToastManager {
     }
 }
 
+// Замените класс BurgerMenu в js/features.js
+
 class BurgerMenu {
     constructor() {
         this.createBurgerMenu();
@@ -68,6 +70,8 @@ class BurgerMenu {
     }
     
     createBurgerMenu() {
+        if (document.querySelector('.burger-menu')) return;
+        
         const burger = document.createElement('div');
         burger.className = 'burger-menu';
         burger.id = 'burgerMenu';
@@ -87,6 +91,8 @@ class BurgerMenu {
     }
     
     createMobileMenu() {
+    if (document.querySelector('.mobile-menu')) return;
+    
     const mobileMenu = document.createElement('div');
     mobileMenu.className = 'mobile-menu';
     mobileMenu.id = 'mobileMenu';
@@ -103,118 +109,109 @@ class BurgerMenu {
         isAdmin = user.role === 'admin';
     }
     
+    // Определяем правильный путь к изображениям в зависимости от текущей страницы
+    const isInPagesFolder = window.location.pathname.includes('/pages/');
+    const imgPath = isInPagesFolder ? '../assets/icons/' : 'assets/icons/';
+    const logoPath = isInPagesFolder ? '../assets/icons/logo.png' : 'assets/icons/logo.png';
+    
     mobileMenu.innerHTML = `
         <div class="mobile-logo">
-            <img src="assets/icons/logo.png" alt="logo">
-            <h2>THE PLANET</h2>
+            <img src="${logoPath}" alt="logo">
+            <h2>GREENERY</h2>
         </div>
         
-        <div class="mobile-section-title">МЕНЮ</div>
+        <div class="mobile-section-title">MENU</div>
         <div class="menu-item">
-            <a href="#" data-section="hero">
-                <img src="assets/icons/home.png" alt="home">
+            <a href="${isInPagesFolder ? '../index.html#hero' : 'index.html#hero'}">
+                <img src="${imgPath}home.png" alt="home">
                 <span>Home</span>
             </a>
         </div>
         <div class="menu-item">
-            <a href="pages/catalog.html">
-                <img src="assets/icons/shop.png" alt="shop">
+            <a href="${isInPagesFolder ? 'catalog.html' : 'pages/catalog.html'}">
+                <img src="${imgPath}shop.png" alt="shop">
                 <span>Shop</span>
             </a>
         </div>
         <div class="menu-item">
-            <a href="#" data-section="products">
-                <img src="assets/icons/blog.png" alt="products">
+            <a href="${isInPagesFolder ? '../index.html#products' : 'index.html#products'}">
+                <img src="${imgPath}blog.png" alt="products">
                 <span>Products</span>
             </a>
         </div>
         <div class="menu-item">
-            <a href="#" data-section="about">
-                <img src="assets/icons/about_us.png" alt="about">
+            <a href="${isInPagesFolder ? '../index.html#about' : 'index.html#about'}">
+                <img src="${imgPath}about_us.png" alt="about">
                 <span>About</span>
             </a>
         </div>
         <div class="menu-item">
-            <a href="#" data-section="gallery">
-                <img src="assets/icons/gallery.png" alt="gallery">
+            <a href="${isInPagesFolder ? '../index.html#gallery' : 'index.html#gallery'}">
+                <img src="${imgPath}gallery.png" alt="gallery">
                 <span>Gallery</span>
             </a>
         </div>
         <div class="menu-item">
-            <a href="#" data-section="map-section">
-                <img src="assets/icons/location.png" alt="location">
+            <a href="${isInPagesFolder ? '../index.html#map-section' : 'index.html#map-section'}">
+                <img src="${imgPath}location.png" alt="location">
                 <span>Location</span>
             </a>
         </div>
         
-        <div class="mobile-section-title">АККАУНТ</div>
+        <div class="mobile-section-title">ACCOUNT</div>
         ${isLoggedIn ? `
             <div class="menu-item">
                 <a href="#">
-                    <img src="assets/icons/human.png" alt="user">
+                    <img src="${imgPath}human.png" alt="user">
                     <span>${userNickname}</span>
                 </a>
             </div>
             <div class="menu-item" id="mobileLogoutBtn">
                 <a href="#">
-                    <img src="assets/icons/door.png" alt="logout">
+                    <img src="${imgPath}door.png" alt="logout">
                     <span>Logout</span>
                 </a>
             </div>
         ` : `
             <div class="menu-item">
-                <a href="pages/register.html">
-                    <img src="assets/icons/human.png" alt="login">
-                    <span>LOGIN</span>
+                <a href="${isInPagesFolder ? 'register.html' : 'pages/register.html'}">
+                    <img src="${imgPath}human.png" alt="login">
+                    <span>Login</span>
                 </a>
             </div>
             <div class="menu-item">
-                <a href="pages/register.html">
-                    <img src="assets/icons/door.png" alt="signup">
-                    <span>SIGN UP</span>
+                <a href="${isInPagesFolder ? 'register.html' : 'pages/register.html'}">
+                    <img src="${imgPath}door.png" alt="signup">
+                    <span>Sign Up</span>
                 </a>
             </div>
         `}
         
-        <div class="mobile-section-title">ИНФОРМАЦИЯ</div>
+        <div class="mobile-section-title">CUSTOMERS</div>
         <div class="menu-item">
-            <a href="#">
-                <img src="assets/icons/email.png" alt="email">
-                <span>MAILING LIST</span>
-            </a>
-        </div>
-        <div class="menu-item">
-            <a href="#">
-                <img src="assets/icons/symbol.png" alt="share">
-                <span>SHARE <span class="red-badge" id="mobileShareCount">12K</span></span>
-            </a>
-        </div>
-        <div class="menu-item">
-            <a href="pages/cart.html">
-                <img src="assets/icons/cart.png" alt="cart">
-                <span>CART <span class="red-badge" id="mobileCartCount">0</span></span>
-            </a>
-        </div>
-        
-        <div class="mobile-section-title">ПОКУПАТЕЛЯМ</div>
-        <div class="menu-item">
-            <a href="pages/favorites.html">
-                <img src="assets/icons/heart.png" alt="favorites">
+            <a href="${isInPagesFolder ? 'favorites.html' : 'pages/favorites.html'}">
+                <img src="${imgPath}heart.png" alt="favorites">
                 <span>Favorites</span>
             </a>
         </div>
         <div class="menu-item">
-            <a href="pages/feedback.html">
-                <img src="assets/icons/blog.png" alt="reviews">
+            <a href="${isInPagesFolder ? 'feedback.html' : 'pages/feedback.html'}">
+                <img src="${imgPath}blog.png" alt="reviews">
                 <span>Reviews</span>
+            </a>
+        </div>
+        <div class="menu-item">
+            <a href="${isInPagesFolder ? 'cart.html' : 'pages/cart.html'}">
+                <img src="${imgPath}cart.png" alt="cart">
+                <span>Cart <span class="red-badge" id="mobileCartCount">0</span></span>
             </a>
         </div>
         
         ${isAdmin ? `
-            <div class="mobile-section-title">АДМИНИСТРИРОВАНИЕ</div>
+            <div class="mobile-section-title">ADMIN</div>
             <div class="menu-item">
-                <a href="pages/admin.html">
-                    <img src="assets/icons/admin.png" alt="admin">
+                <a href="${isInPagesFolder ? 'admin.html' : 'pages/admin.html'}">
+                    <img src="${imgPath}admin.png" alt="admin">
                     <span>Admin Panel</span>
                 </a>
             </div>
@@ -257,26 +254,20 @@ class BurgerMenu {
         
         overlay.addEventListener('click', closeMenu);
         
-        const closeBtn = document.getElementById('mobileCloseBtn');
-        if (closeBtn) {
-            closeBtn.addEventListener('click', closeMenu);
-        }
-        
         const logoutBtn = document.getElementById('mobileLogoutBtn');
         if (logoutBtn) {
             logoutBtn.addEventListener('click', (e) => {
                 e.preventDefault();
                 localStorage.removeItem('currentUser');
-                ToastManager.show('Вы вышли из аккаунта', 'info');
-                setTimeout(() => {
-                    window.location.reload();
-                }, 1000);
+                window.location.reload();
             });
         }
         
-        mobileMenu.querySelectorAll('a').forEach(link => {
+        mobileMenu.querySelectorAll('.menu-item a').forEach(link => {
             link.addEventListener('click', () => {
-                closeMenu();
+                if (!link.closest('#mobileLogoutBtn')) {
+                    closeMenu();
+                }
             });
         });
     }
@@ -291,9 +282,15 @@ class BurgerMenu {
                 cartBadge.textContent = cartCount;
             }
         } catch (error) {
-            console.error('Ошибка загрузки корзины:', error);
+            console.error('Error loading cart:', error);
         }
     }
+}
+
+if (window.innerWidth <= 1200) {
+    document.addEventListener('DOMContentLoaded', () => {
+        new BurgerMenu();
+    });
 }
 
 class SmoothScroll {
@@ -360,10 +357,30 @@ class ModalManager {
         });
     }
     
+    // Функция для получения перевода
+    _t(key, params = {}) {
+        const lang = localStorage.getItem('language') || 'en';
+        let text = i18Obj[lang]?.[key] || i18Obj['en'][key] || key;
+        
+        Object.keys(params).forEach(param => {
+            text = text.replace(`{{${param}}}`, params[param]);
+        });
+        
+        return text;
+    }
+    
     openProductDetail(product) {
         this.currentProduct = product;
         const modal = document.getElementById('productModal');
         const content = document.getElementById('modalContent');
+        
+        const currentLang = localStorage.getItem('language') || 'en';
+        const inStockText = currentLang === 'ru' ? '✓ В наличии' : '✓ In stock';
+        const outStockText = currentLang === 'ru' ? '✗ Нет в наличии' : '✗ Out of stock';
+        const addToCartText = currentLang === 'ru' ? '🛒 Добавить в корзину' : '🛒 Add to cart';
+        const addToFavText = currentLang === 'ru' ? '🤍 В избранное' : '🤍 Add to favorites';
+        const removeFromFavText = currentLang === 'ru' ? '❤️ В избранном' : '❤️ Remove from favorites';
+        const noDescText = currentLang === 'ru' ? 'Нет описания' : 'No description';
         
         content.innerHTML = `
             <div class="product-detail-image">
@@ -377,17 +394,17 @@ class ModalManager {
                     ${this.generateStars(product.rating)}
                 </div>
                 <div class="product-detail-description">
-                    ${this.escapeHtml(product.description || 'Нет описания')}
+                    ${this.escapeHtml(product.description || noDescText)}
                 </div>
                 <span class="product-detail-stock ${product.inStock ? 'stock-in' : 'stock-out'}">
-                    ${product.inStock ? '✓ В наличии' : '✗ Нет в наличии'}
+                    ${product.inStock ? inStockText : outStockText}
                 </span>
                 <div class="modal-buttons" style="margin-top: 20px;">
                     <button class="modal-btn modal-btn-primary" onclick="window.addToCartFromDetail(${product.id})">
-                        🛒 Добавить в корзину
+                        ${addToCartText}
                     </button>
                     <button class="modal-btn modal-btn-secondary" onclick="window.toggleFavoriteFromDetail(${product.id})">
-                        ${product.isFavorite ? '❤️ В избранном' : '🤍 В избранное'}
+                        ${product.isFavorite ? removeFromFavText : addToFavText}
                     </button>
                 </div>
             </div>
@@ -399,6 +416,9 @@ class ModalManager {
     openFormModal(title, fields, onSubmit) {
         const modal = document.getElementById('productModal');
         const content = document.getElementById('modalContent');
+        
+        const confirmText = this._t('confirm');
+        const cancelText = this._t('cancel');
         
         let fieldsHtml = '';
         fields.forEach(field => {
@@ -437,8 +457,8 @@ class ModalManager {
             <h3>${title}</h3>
             ${fieldsHtml}
             <div class="modal-buttons">
-                <button class="modal-btn modal-btn-primary" id="modalSubmitBtn">Подтвердить</button>
-                <button class="modal-btn modal-btn-secondary" id="modalCancelBtn">Отмена</button>
+                <button class="modal-btn modal-btn-primary" id="modalSubmitBtn">${confirmText}</button>
+                <button class="modal-btn modal-btn-secondary" id="modalCancelBtn">${cancelText}</button>
             </div>
         `;
         
@@ -475,12 +495,15 @@ class ModalManager {
         const modal = document.getElementById('productModal');
         const content = document.getElementById('modalContent');
         
+        const confirmText = this._t('confirm');
+        const cancelText = this._t('cancel');
+        
         content.innerHTML = `
             <h3>${title}</h3>
-            <p style="margin: 20px 0; line-height: 1.6; color: #333;">${message}</p>
+            <p style="margin: 20px 0; line-height: 1.6; color: var(--text-primary, #333);">${message}</p>
             <div class="modal-buttons">
-                <button class="modal-btn modal-btn-primary" id="modalConfirmBtn" style="background: #c62828;">🗑️ Удалить</button>
-                <button class="modal-btn modal-btn-secondary" id="modalCancelBtn">Отмена</button>
+                <button class="modal-btn modal-btn-primary" id="modalConfirmBtn" style="background: #c62828;">🗑️ ${confirmText}</button>
+                <button class="modal-btn modal-btn-secondary" id="modalCancelBtn">${cancelText}</button>
             </div>
         `;
         
@@ -508,6 +531,7 @@ class ModalManager {
     }
     
     escapeHtml(text) {
+        if (!text) return '';
         const div = document.createElement('div');
         div.textContent = text;
         return div.innerHTML;
@@ -1178,3 +1202,4 @@ document.addEventListener('DOMContentLoaded', () => {
     if (prevBtn) prevBtn.addEventListener('click', () => window.changePhotoPage(-1));
     if (nextBtn) nextBtn.addEventListener('click', () => window.changePhotoPage(1));
 });
+

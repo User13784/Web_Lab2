@@ -797,3 +797,12 @@
         padding: 8px 15px !important;
     }
 }
+
+.scroll-top-btn {
+    display: none !important;
+}
+
+.modal-content {
+        display: none !important;
+
+}

@@ -66,10 +66,19 @@
         </div>
     </div>
 
-    <script src="../js/utils.js"></script>
-    <script src="../js/translations.js"></script>
-    <script src="../js/theme.js"></script>
-    <script src="../js/features.js"></script>
-    <script src="../js/cart.js"></script>
+<script src="../js/utils.js"></script>
+<script src="../js/translations.js"></script>
+<script src="../js/theme.js"></script>
+<script src="../js/features.js"></script>
+<script src="../js/cart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        if (window.innerWidth <= 1200 && typeof BurgerMenu !== 'undefined') {
+            if (!window.burgerMenuInstance) {
+                window.burgerMenuInstance = new BurgerMenu();
+            }
+        }
+    });
+</script>
 </body>
 </html>

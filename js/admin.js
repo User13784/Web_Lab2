@@ -1,6 +1,21 @@
 const API_URL = 'http://localhost:3000';
 let currentUser = null;
 
+function getCurrentLanguage() {
+    return localStorage.getItem('language') || 'en';
+}
+
+function translate(key, params = {}) {
+    const lang = getCurrentLanguage();
+    let text = i18Obj[lang]?.[key] || i18Obj['en'][key] || key;
+    
+    Object.keys(params).forEach(param => {
+        text = text.replace(`{{${param}}}`, params[param]);
+    });
+    
+    return text;
+}
+
 function showMessage(message, type = 'info') {
     const existingMsg = document.querySelector('.message-popup');
     if (existingMsg) existingMsg.remove();
@@ -33,22 +48,22 @@ function checkAdminAccess() {
 }
 
 function getProductName(product) {
-    if (!product) return 'Товар';
+    if (!product) return translate('product');
     if (typeof product === 'string') return product;
     if (typeof product.name === 'string') return product.name;
     
-    const currentLang = localStorage.getItem('language') || 'ru';
+    const currentLang = getCurrentLanguage();
     if (product.name && typeof product.name === 'object') {
-        return product.name[currentLang] || product.name['ru'] || product.name['en'] || 'Товар';
+        return product.name[currentLang] || product.name['ru'] || product.name['en'] || translate('product');
     }
-    return 'Товар';
+    return translate('product');
 }
 
 function getProductDescription(product) {
     if (!product || !product.description) return '';
     if (typeof product.description === 'string') return product.description;
     
-    const currentLang = localStorage.getItem('language') || 'ru';
+    const currentLang = getCurrentLanguage();
     return product.description[currentLang] || product.description['ru'] || product.description['en'] || '';
 }
 
@@ -68,15 +83,37 @@ async function loadProducts() {
         const container = document.getElementById('productsContainer');
         if (!container) return;
         
+        const currentLang = getCurrentLanguage();
+        
         if (products.length === 0) {
-            container.innerHTML = '<div class="no-data">Нет товаров</div>';
+            container.innerHTML = `<div class="no-data">${translate('no-data')}</div>`;
             return;
         }
+        
+        const idText = translate('id');
+        const imageText = translate('image');
+        const nameText = translate('name');
+        const categoryText = translate('category');
+        const priceText = translate('price');
+        const stockText = translate('availability');
+        const actionsText = translate('actions');
+        const inStockLabel = translate('in-stock');
+        const outStockLabel = translate('out-of-stock');
+        const editText = translate('edit');
+        const deleteText = translate('delete');
         
         container.innerHTML = `
             <table class="products-table">
                 <thead>
-                    <tr><th>ID</th><th>Изображение</th><th>Название</th><th>Категория</th><th>Цена</th><th>Наличие</th><th>Действия</th></tr>
+                    <tr>
+                        <th>${idText}</th>
+                        <th>${imageText}</th>
+                        <th>${nameText}</th>
+                        <th>${categoryText}</th>
+                        <th>${priceText}</th>
+                        <th>${stockText}</th>
+                        <th>${actionsText}</th>
+                    </tr>
                 </thead>
                 <tbody>
                     ${products.map(product => `
@@ -86,11 +123,11 @@ async function loadProducts() {
                             <td>${escapeHtml(getProductName(product))}</td>
                             <td>${getCategoryLabel(product.category)}</td>
                             <td>${product.price} £</td>
-                            <td>${product.inStock ? 'В наличии' : 'Нет в наличии'}</td>
+                            <td>${product.inStock ? inStockLabel : outStockLabel}</td>
                             <td>
                                 <div class="action-buttons">
-                                    <button class="edit-btn" onclick="openEditProductModal(${product.id})">Редактировать</button>
-                                    <button class="delete-btn" onclick="openDeleteProductModal(${product.id}, '${escapeHtml(getProductName(product))}')">Удалить</button>
+                                    <button class="edit-btn" onclick="openEditProductModal(${product.id})">${editText}</button>
+                                    <button class="delete-btn" onclick="openDeleteProductModal(${product.id}, '${escapeHtml(getProductName(product))}')">${deleteText}</button>
                                 </div>
                             </td>
                         </tr>
@@ -100,7 +137,7 @@ async function loadProducts() {
         `;
     } catch (error) {
         console.error('Ошибка загрузки товаров:', error);
-        showMessage('Ошибка загрузки товаров', 'error');
+        showMessage(translate('error-load-products'), 'error');
     }
 }
 
@@ -111,7 +148,7 @@ async function loadProductsForSelect() {
         
         const filterSelect = document.getElementById('adminFilterProduct');
         if (filterSelect) {
-            filterSelect.innerHTML = '<option value="all">Все товары</option>' +
+            filterSelect.innerHTML = `<option value="all" data-i18n="all-products-filter">${translate('all-products-filter')}</option>` +
                 products.map(p => `<option value="${p.id}">${escapeHtml(getProductName(p))}</option>`).join('');
         }
     } catch (error) {
@@ -126,7 +163,7 @@ async function loadUsersForFilter() {
         
         const filterSelect = document.getElementById('adminFilterUser');
         if (filterSelect) {
-            filterSelect.innerHTML = '<option value="all">Все пользователи</option>' +
+            filterSelect.innerHTML = `<option value="all" data-i18n="all-users">${translate('all-users')}</option>` +
                 users.map(u => `<option value="${u.id}">${escapeHtml(u.nickname || u.email)}</option>`).join('');
         }
     } catch (error) {
@@ -138,16 +175,16 @@ function getReviewText(review) {
     if (!review.text) return '';
     if (typeof review.text === 'string') return review.text;
     
-    const currentLang = localStorage.getItem('language') || 'ru';
+    const currentLang = getCurrentLanguage();
     return review.text[currentLang] || review.text['ru'] || review.text['en'] || '';
 }
 
 function getReviewProductName(review) {
-    if (!review.productName) return 'Товар';
+    if (!review.productName) return translate('product');
     if (typeof review.productName === 'string') return review.productName;
     
-    const currentLang = localStorage.getItem('language') || 'ru';
-    return review.productName[currentLang] || review.productName['ru'] || review.productName['en'] || 'Товар';
+    const currentLang = getCurrentLanguage();
+    return review.productName[currentLang] || review.productName['ru'] || review.productName['en'] || translate('product');
 }
 
 async function loadReviews() {
@@ -172,8 +209,12 @@ async function loadReviews() {
         const container = document.getElementById('reviewsContainer');
         if (!container) return;
         
+        const currentLang = getCurrentLanguage();
+        const deleteText = translate('delete');
+        const noReviewsText = translate('no-data');
+        
         if (reviews.length === 0) {
-            container.innerHTML = '<div class="no-data">Нет отзывов</div>';
+            container.innerHTML = `<div class="no-data">${noReviewsText}</div>`;
             return;
         }
         
@@ -181,12 +222,12 @@ async function loadReviews() {
             <div class="review-card" data-id="${review.id}">
                 <div class="review-header">
                     <div>
-                        <span class="review-user">${escapeHtml(review.userNickname || 'Пользователь')}</span>
+                        <span class="review-user">${escapeHtml(review.userNickname || translate('user'))}</span>
                         <span class="review-product">${escapeHtml(getReviewProductName(review))}</span>
                     </div>
                     <div>
                         <span class="review-rating">${'★'.repeat(review.rating)}${'☆'.repeat(5 - review.rating)}</span>
-                        <button class="delete-review-btn" onclick="deleteReview(${review.id})">Удалить</button>
+                        <button class="delete-review-btn" onclick="deleteReview(${review.id})">${deleteText}</button>
                     </div>
                 </div>
                 <div class="review-text">${escapeHtml(getReviewText(review))}</div>
@@ -195,47 +236,50 @@ async function loadReviews() {
         `).join('');
     } catch (error) {
         console.error('Ошибка загрузки отзывов:', error);
-        showMessage('Ошибка загрузки отзывов', 'error');
+        showMessage(translate('error-load-reviews'), 'error');
     }
 }
 
 window.openAddProductModal = () => {
+    const currentLang = getCurrentLanguage();
+    const title = translate('add-product-title');
+    
     if (window.modalManager) {
         window.modalManager.openFormModal(
-            'Добавление товара',
+            title,
             [
-                { name: 'name', label: 'Название товара', type: 'text', required: true, placeholder: 'Введите название' },
-                { name: 'price', label: 'Цена (£)', type: 'number', required: true, placeholder: '0.00' },
+                { name: 'name', label: translate('product-name'), type: 'text', required: true, placeholder: translate('product-name-placeholder') },
+                { name: 'price', label: translate('price'), type: 'number', required: true, placeholder: translate('price-placeholder') },
                 { 
                     name: 'category', 
-                    label: 'Категория', 
+                    label: translate('category'), 
                     type: 'select', 
                     required: true,
                     options: [
-                        { value: 'sofa', text: 'Диваны' },
-                        { value: 'living', text: 'Гостиная' },
-                        { value: 'kitchen', text: 'Кухня' },
-                        { value: 'bedroom', text: 'Спальня' },
-                        { value: 'bathroom', text: 'Ванная' },
-                        { value: 'decor', text: 'Декор' },
-                        { value: 'ceramics', text: 'Керамика' }
+                        { value: 'sofa', text: currentLang === 'ru' ? 'Диваны' : 'Sofas' },
+                        { value: 'living', text: currentLang === 'ru' ? 'Гостиная' : 'Living Room' },
+                        { value: 'kitchen', text: currentLang === 'ru' ? 'Кухня' : 'Kitchen' },
+                        { value: 'bedroom', text: currentLang === 'ru' ? 'Спальня' : 'Bedroom' },
+                        { value: 'bathroom', text: currentLang === 'ru' ? 'Ванная' : 'Bathroom' },
+                        { value: 'decor', text: currentLang === 'ru' ? 'Декор' : 'Decor' },
+                        { value: 'ceramics', text: currentLang === 'ru' ? 'Керамика' : 'Ceramics' }
                     ]
                 },
-                { name: 'description', label: 'Описание', type: 'textarea', required: true, placeholder: 'Введите описание товара...' },
-                { name: 'image', label: 'URL изображения', type: 'text', required: true, placeholder: 'assets/images/chair.png' },
+                { name: 'description', label: translate('description'), type: 'textarea', required: true, placeholder: translate('description-placeholder') },
+                { name: 'image', label: translate('image-url'), type: 'text', required: true, placeholder: translate('image-url-placeholder') },
                 { 
                     name: 'stock', 
-                    label: 'Наличие', 
+                    label: translate('stock'), 
                     type: 'select', 
                     required: true,
                     options: [
-                        { value: 'true', text: 'В наличии' },
-                        { value: 'false', text: 'Нет в наличии' }
+                        { value: 'true', text: translate('in-stock') },
+                        { value: 'false', text: translate('out-of-stock') }
                     ]
                 },
                 { 
                     name: 'rating', 
-                    label: 'Рейтинг', 
+                    label: translate('rating'), 
                     type: 'select', 
                     required: false,
                     value: '5',
@@ -282,12 +326,12 @@ window.openAddProductModal = () => {
                         body: JSON.stringify(newProduct)
                     });
                     
-                    showMessage('Товар успешно добавлен', 'success');
+                    showMessage(translate('product-added-success'), 'success');
                     loadProducts();
                     loadProductsForSelect();
                 } catch (error) {
                     console.error('Ошибка:', error);
-                    showMessage('Ошибка при добавлении товара', 'error');
+                    showMessage(translate('product-add-error'), 'error');
                 }
             }
         );
@@ -299,44 +343,47 @@ window.openEditProductModal = async (productId) => {
         const response = await fetch(`${API_URL}/products/${productId}`);
         const product = await response.json();
         
+        const currentLang = getCurrentLanguage();
+        const title = translate('edit-product-title');
+        
         if (window.modalManager) {
             window.modalManager.openFormModal(
-                'Редактирование товара',
+                title,
                 [
-                    { name: 'name', label: 'Название товара', type: 'text', required: true, value: getProductName(product), placeholder: 'Введите название' },
-                    { name: 'price', label: 'Цена (£)', type: 'number', required: true, value: product.price, placeholder: '0.00' },
+                    { name: 'name', label: translate('product-name'), type: 'text', required: true, value: getProductName(product), placeholder: translate('product-name-placeholder') },
+                    { name: 'price', label: translate('price'), type: 'number', required: true, value: product.price, placeholder: translate('price-placeholder') },
                     { 
                         name: 'category', 
-                        label: 'Категория', 
+                        label: translate('category'), 
                         type: 'select', 
                         required: true,
                         value: product.category,
                         options: [
-                            { value: 'sofa', text: 'Диваны' },
-                            { value: 'living', text: 'Гостиная' },
-                            { value: 'kitchen', text: 'Кухня' },
-                            { value: 'bedroom', text: 'Спальня' },
-                            { value: 'bathroom', text: 'Ванная' },
-                            { value: 'decor', text: 'Декор' },
-                            { value: 'ceramics', text: 'Керамика' }
+                            { value: 'sofa', text: currentLang === 'ru' ? 'Диваны' : 'Sofas' },
+                            { value: 'living', text: currentLang === 'ru' ? 'Гостиная' : 'Living Room' },
+                            { value: 'kitchen', text: currentLang === 'ru' ? 'Кухня' : 'Kitchen' },
+                            { value: 'bedroom', text: currentLang === 'ru' ? 'Спальня' : 'Bedroom' },
+                            { value: 'bathroom', text: currentLang === 'ru' ? 'Ванная' : 'Bathroom' },
+                            { value: 'decor', text: currentLang === 'ru' ? 'Декор' : 'Decor' },
+                            { value: 'ceramics', text: currentLang === 'ru' ? 'Керамика' : 'Ceramics' }
                         ]
                     },
-                    { name: 'description', label: 'Описание', type: 'textarea', required: true, value: getProductDescription(product), placeholder: 'Введите описание товара...' },
-                    { name: 'image', label: 'URL изображения', type: 'text', required: true, value: product.image, placeholder: 'assets/images/chair.png' },
+                    { name: 'description', label: translate('description'), type: 'textarea', required: true, value: getProductDescription(product), placeholder: translate('description-placeholder') },
+                    { name: 'image', label: translate('image-url'), type: 'text', required: true, value: product.image, placeholder: translate('image-url-placeholder') },
                     { 
                         name: 'stock', 
-                        label: 'Наличие', 
+                        label: translate('stock'), 
                         type: 'select', 
                         required: true,
                         value: product.inStock ? 'true' : 'false',
                         options: [
-                            { value: 'true', text: 'В наличии' },
-                            { value: 'false', text: 'Нет в наличии' }
+                            { value: 'true', text: translate('in-stock') },
+                            { value: 'false', text: translate('out-of-stock') }
                         ]
                     },
                     { 
                         name: 'rating', 
-                        label: 'Рейтинг', 
+                        label: translate('rating'), 
                         type: 'select', 
                         required: false,
                         value: product.rating,
@@ -379,39 +426,39 @@ window.openEditProductModal = async (productId) => {
                             })
                         });
                         
-                        showMessage('Товар успешно обновлен', 'success');
+                        showMessage(translate('product-updated-success'), 'success');
                         loadProducts();
                         loadProductsForSelect();
                     } catch (error) {
                         console.error('Ошибка:', error);
-                        showMessage('Ошибка при обновлении товара', 'error');
+                        showMessage(translate('product-update-error'), 'error');
                     }
                 }
             );
         }
     } catch (error) {
         console.error('Ошибка:', error);
-        showMessage('Ошибка загрузки товара для редактирования', 'error');
+        showMessage(translate('product-load-error'), 'error');
     }
 };
 
 window.openDeleteProductModal = (productId, productName) => {
     if (window.modalManager) {
         window.modalManager.openConfirmModal(
-            'Подтверждение удаления',
-            `Вы уверены, что хотите удалить товар "${productName}"? Это действие нельзя отменить.`,
+            translate('confirm-delete'),
+            translate('delete-confirm-text', { name: productName }),
             async () => {
                 try {
                     await fetch(`${API_URL}/products/${productId}`, {
                         method: 'DELETE'
                     });
                     
-                    showMessage(`Товар "${productName}" успешно удален`, 'success');
+                    showMessage(translate('product-deleted-success', { name: productName }), 'success');
                     loadProducts();
                     loadProductsForSelect();
                 } catch (error) {
                     console.error('Ошибка:', error);
-                    showMessage('Ошибка при удалении товара', 'error');
+                    showMessage(translate('product-delete-error'), 'error');
                 }
             }
         );
@@ -419,27 +466,29 @@ window.openDeleteProductModal = (productId, productName) => {
 };
 
 async function deleteReview(id) {
-    if (confirm('Вы уверены, что хотите удалить этот отзыв?')) {
+    const confirmText = translate('confirm-delete-review');
+    if (confirm(confirmText)) {
         try {
             await fetch(`${API_URL}/feedback/${id}`, { method: 'DELETE' });
-            showMessage('Отзыв успешно удален', 'success');
+            showMessage(translate('review-deleted-success'), 'success');
             loadReviews();
         } catch (error) {
             console.error('Ошибка:', error);
-            showMessage('Ошибка при удалении отзыва', 'error');
+            showMessage(translate('review-delete-error'), 'error');
         }
     }
 }
 
 function getCategoryLabel(categoryValue) {
+    const currentLang = getCurrentLanguage();
     const categories = {
-        'sofa': 'Диваны',
-        'living': 'Гостиная',
-        'kitchen': 'Кухня',
-        'bedroom': 'Спальня',
-        'bathroom': 'Ванная',
-        'decor': 'Декор',
-        'ceramics': 'Керамика'
+        'sofa': currentLang === 'ru' ? 'Диваны' : 'Sofas',
+        'living': currentLang === 'ru' ? 'Гостиная' : 'Living Room',
+        'kitchen': currentLang === 'ru' ? 'Кухня' : 'Kitchen',
+        'bedroom': currentLang === 'ru' ? 'Спальня' : 'Bedroom',
+        'bathroom': currentLang === 'ru' ? 'Ванная' : 'Bathroom',
+        'decor': currentLang === 'ru' ? 'Декор' : 'Decor',
+        'ceramics': currentLang === 'ru' ? 'Керамика' : 'Ceramics'
     };
     return categories[categoryValue] || categoryValue;
 }
@@ -453,7 +502,8 @@ function escapeHtml(text) {
 
 function formatDate(dateString) {
     const date = new Date(dateString);
-    return date.toLocaleDateString('ru-RU', {
+    const currentLang = getCurrentLanguage();
+    return date.toLocaleDateString(currentLang === 'ru' ? 'ru-RU' : 'en-US', {
         day: '2-digit',
         month: '2-digit',
         year: 'numeric',
@@ -479,6 +529,21 @@ function initEventListeners() {
     }
 }
 
+function translateAdminPanel() {
+    loadProducts();
+    loadReviews();
+    loadProductsForSelect();
+    loadUsersForFilter();
+}
+
+window.addEventListener('storage', (event) => {
+    if (event.key === 'language') {
+        setTimeout(() => {
+            translateAdminPanel();
+        }, 100);
+    }
+});
+
 document.addEventListener('DOMContentLoaded', () => {
     console.log('Админ-панель загружена');
     
@@ -488,3 +553,66 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 window.deleteReview = deleteReview;
+
+function translateAdminPanel() {
+    const currentLang = getCurrentLanguage();
+    
+    const addProductBtn = document.getElementById('openAddProductModalBtn');
+    if (addProductBtn) {
+        addProductBtn.innerHTML = currentLang === 'ru' ? '➕ Добавить товар' : '➕ Add product';
+    }
+    
+    const applyFiltersBtn = document.getElementById('applyFiltersBtn');
+    if (applyFiltersBtn) {
+        applyFiltersBtn.innerHTML = currentLang === 'ru' ? '🔍 Применить фильтры' : '🔍 Apply filters';
+    }
+    
+    const productsTitle = document.querySelector('.admin-section:first-child h2');
+    if (productsTitle && productsTitle.getAttribute('data-i18n') === 'products-management') {
+        productsTitle.textContent = currentLang === 'ru' ? '📦 Управление товарами' : '📦 Products Management';
+    }
+    
+    const productListTitle = document.querySelector('.products-list h3');
+    if (productListTitle && productListTitle.getAttribute('data-i18n') === 'product-list') {
+        productListTitle.textContent = currentLang === 'ru' ? 'Список товаров' : 'Product list';
+    }
+    
+    const reviewsTitle = document.querySelector('.admin-section:last-child h2');
+    if (reviewsTitle && reviewsTitle.getAttribute('data-i18n') === 'reviews-management') {
+        reviewsTitle.textContent = currentLang === 'ru' ? '💬 Управление отзывами' : '💬 Reviews Management';
+    }
+    
+    const filterProductLabel = document.querySelector('.reviews-filters .form-group:first-child label');
+    if (filterProductLabel) {
+        filterProductLabel.textContent = currentLang === 'ru' ? 'Фильтр по товару' : 'Filter by product';
+    }
+    
+    const filterUserLabel = document.querySelector('.reviews-filters .form-group:last-child label');
+    if (filterUserLabel) {
+        filterUserLabel.textContent = currentLang === 'ru' ? 'Фильтр по пользователю' : 'Filter by user';
+    }
+    
+    const searchInput = document.getElementById('searchProduct');
+    if (searchInput) {
+        searchInput.placeholder = currentLang === 'ru' ? '🔍 Поиск товаров...' : '🔍 Search products...';
+    }
+    
+    loadProducts();
+    loadReviews();
+    loadProductsForSelect();
+    loadUsersForFilter();
+}
+
+window.addEventListener('storage', (event) => {
+    if (event.key === 'language') {
+        setTimeout(() => {
+            translateAdminPanel();
+        }, 100);
+    }
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => {
+        translateAdminPanel();
+    }, 100);
+});

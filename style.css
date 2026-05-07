@@ -2416,3 +2416,227 @@ background-image: url(../assets/icons/footer_symbol.png);
 .image-container3 .content2 h2 {
     transform: translateX(-70px);
 }
+@media (max-width: 1200px) {
+    .vertical-line {
+        display: none !important;
+    }
+    
+    .burger-menu {
+        display: flex !important;
+    }
+    
+    .main-content {
+        margin-left: 0;
+        width: 100%;
+    }
+    
+    .copyright-bar {
+        margin-left: 0;
+        width: 100%;
+    }
+    
+    .subscribe,
+    .footer-bottom,
+    .image-container {
+        margin-left: 0;
+        width: 100%;
+    }
+}
+
+@media (min-width: 1201px) {
+    .vertical-line {
+        display: flex !important;
+    }
+    
+    .burger-menu {
+        display: none !important;
+    }
+    
+    .mobile-menu {
+        display: none !important;
+    }
+    
+    .mobile-overlay {
+        display: none !important;
+    }
+}
+
+@media (max-width: 1200px) {
+    .living-badge,
+    .living-badge2,
+    .living-badge3,
+    .living-badge4 {
+        display: none !important;
+    }
+}
+
+@media (max-width: 1200px) {
+    .footer-bottom {
+        margin-left: 0 !important;
+        width: 100% !important;
+        text-align: center !important;
+    }
+    
+    .bottom-design {
+        background: white !important;
+        padding: 40px 20px !important;
+        text-align: center !important;
+        margin: 0 auto !important;
+    }
+    
+    .content6 {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 40px !important;
+        margin-top: 50px !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        transform: none !important;
+    }
+    
+    .footer-col {
+        align-items: center !important;
+        text-align: center !important;
+        width: 100% !important;
+        max-width: 300px !important;
+        margin: 0 auto !important;
+        transform: none !important;
+    }
+    
+    .footer-col h3 {
+        transform: none !important;
+        text-align: center !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+    
+    .footer-links {
+        transform: none !important;
+        text-align: center !important;
+        margin-left: 0 !important;
+    }
+    
+    .footer-contact {
+        transform: none !important;
+        text-align: center !important;
+        margin-left: 0 !important;
+    }
+    
+    .logo-col {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+    }
+    
+    .logo-col img {
+        transform: none !important;
+        margin: 0 auto !important;
+        position: static !important;
+    }
+    
+    .logo-col p {
+        transform: none !important;
+        text-align: center !important;
+        width: 100% !important;
+        max-width: 280px !important;
+        margin: 15px auto !important;
+        position: static !important;
+    }
+    
+    .circle {
+        transform: none !important;
+        justify-content: center !important;
+        margin: 20px auto !important;
+        position: static !important;
+    }
+    
+    .service-hours-box {
+        transform: none !important;
+        margin: 0 auto !important;
+        width: 230px !important;
+        position: static !important;
+    }
+    
+    .hours-row {
+        justify-content: center !important;
+        gap: 15px !important;
+    }
+    
+    .hours-row .day,
+    .hours-row .time {
+        position: static !important;
+        left: auto !important;
+        transform: none !important;
+    }
+    
+    .circle li {
+        position: static !important;
+        left: auto !important;
+    }
+    
+    .content6 .footer-col:nth-child(2) .footer-links {
+        transform: none !important;
+        margin-left: 0 !important;
+    }
+    
+    .content6 .footer-col:nth-child(3) .footer-contact {
+        transform: none !important;
+    }
+    
+    .content6 .footer-col:nth-child(4) .service-hours-box {
+        transform: none !important;
+        left: auto !important;
+    }
+    
+    .footer-col:nth-child(2) h3,
+    .footer-col:nth-child(3) h3,
+    .footer-col:nth-child(4) h3 {
+        transform: none !important;
+    }
+}
+
+.feature-text-container {
+    visibility: hidden;
+    opacity: 0;
+    height: 0;
+    overflow: hidden;
+}
+
+.scroll-top-btn {
+    display: none !important;
+}
+
+.modal-content {
+        display: none !important;
+
+}
+
+.living-badge,
+.living-badge2,
+.living-badge3,
+.living-badge4 {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+}
+
+.living-badge span,
+.living-badge2 span,
+.living-badge3 span,
+.living-badge4 span {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    width: 100% !important;
+    height: 100% !important;
+    line-height: 1.2 !important;
+}
+
+.gallery-block {
+    margin-top: -275px !important;
+    padding-top: 120px !important;
+}

@@ -37,7 +37,7 @@ const i18Obj = {
         
         // Products section
         'our-products': 'Our Products',
-        'cat-sofa': 'Single Sofa',
+        'cat-sofa': 'Sofas',
         'cat-living': 'Living Room',
         'cat-kitchen': 'Kitchen',
         'cat-bedroom': 'Bed Room',
@@ -46,7 +46,7 @@ const i18Obj = {
         'cat-ceramics': 'Ceramics',
         
         // Product titles
-        'product-title-sofa': 'Single Sofa',
+        'product-title-sofa': 'Sofa',
         
         // Badges
         'new': 'New',
@@ -109,8 +109,7 @@ const i18Obj = {
         'sunday': 'Sunday:',
         'closed': 'We are Closed',
         'footer-text': 'Contrary to popular belief, Lorem Ipsum is not simply years old Latin.',
-        'copyright': '2021 Greenery. All Right Reserved',  
-
+        'copyright': '2021 Greenery. All Right Reserved',
         
         // Catalog page
         'catalog-title': 'Our Catalog',
@@ -198,6 +197,42 @@ const i18Obj = {
         'attempts-left': 'Attempts left:',
         'generate-manual': 'Enter nickname manually (English letters only)',
         
+        // Error messages
+        'phone-error': 'Enter a valid Belarus phone number (+375XXXXXXXXX or 375XXXXXXXXX)',
+        'email-error': 'Enter a valid email address',
+        'birth-error': 'Enter your date of birth',
+        'birth-error-age': 'You must be at least 16 years old (currently {{age}} years)',
+        'firstname-error': 'Enter your first name',
+        'lastname-error': 'Enter your last name',
+        'nickname-error': 'Nickname must contain only English letters (A-Z, a-z), numbers (0-9) and symbols _, -, .',
+        'nickname-exists': 'This nickname already exists, try another',
+        'nickname-min-length': 'Nickname must be at least 3 characters',
+        'nickname-max-length': 'Nickname must be no more than 30 characters',
+        'nickname-english-only': 'Nickname can only contain English letters! Russian letters are not allowed.',
+        'password-error': 'Password must contain: min 8 chars, uppercase, lowercase, number and special character',
+        'password-match-error': 'Passwords do not match',
+        'agreement-error': 'You must accept the User Agreement',
+        'generate-success': 'Generated new nickname: {{nickname}}',
+        'generate-error': 'Generated nickname is already taken, try again',
+        'generate-attempts-exhausted': 'You have exhausted 5 generation attempts. You can now enter a nickname manually',
+        'attempts-left': 'Generation attempts left: {{attempts}}',
+        'attempts-exhausted-warning': '⚠️ Generation attempts exhausted. Enter nickname manually (English letters only)',
+        'nickname-manual-placeholder': 'Enter nickname manually (English letters only)',
+        'nickname-auto-placeholder': 'Will be generated automatically',
+        'age-hint-info': 'Minimum age for registration: 16 years',
+        'age-hint-success': 'Age: {{age}} years - meets requirements',
+        'age-hint-warning': 'Age: {{age}} years - minimum 16 years required',
+        'register-success': 'Registration successful! You can now log in',
+        'register-error': 'Registration error: {{error}}',
+        'phone-unique-error': 'User with this phone number already exists',
+        'email-unique-error': 'User with this email already exists',
+        'nickname-unique-error': 'This nickname is already taken, try another',
+        'fill-fields-error': 'Please fill in all fields',
+        'login-error': 'Invalid email or password',
+        'user-not-found': 'User with this email not found',
+        'wrong-password': 'Wrong password',
+        'generate-firstname-lastname': 'Please enter first name and last name first',
+        
         // Admin page
         'admin-panel': '👑 Admin Panel',
         'admin-subtitle': 'Manage products and reviews',
@@ -225,6 +260,18 @@ const i18Obj = {
         'confirm-delete': 'Confirm deletion',
         'delete-confirm-text': 'Are you sure you want to delete this item? This action cannot be undone.',
         
+        // Admin modal
+        'product-name': 'Product name',
+        'price': 'Price £',
+        'description': 'Description',
+        'image-url': 'Image URL',
+        'stock': 'Availability',
+        'rating': 'Rating',
+        'confirm': 'Confirm',
+        'cancel': 'Cancel',
+        'add-product-title': 'Add product',
+        'edit-product-title': 'Edit product',
+        
         // Profile modal
         'personal-data': '👤 Personal data',
         'theme': 'Theme',
@@ -244,7 +291,20 @@ const i18Obj = {
         'no-description': 'No description',
         'add-to-cart-detail': '🛒 Add to cart',
         'add-to-favorites': '🤍 Add to favorites',
-        'remove-from-favorites': '❤️ Remove from favorites'
+        'remove-from-favorites': '❤️ Remove from favorites',
+
+        // Placeholders
+        'email-placeholder': 'example@mail.com',
+        'password-placeholder': 'Enter password',
+        'phone-placeholder': '+375291234567',
+        'firstname-placeholder': 'Ivan',
+        'lastname-placeholder': 'Petrov',
+        'patronymic-placeholder': 'Ivanovich',
+        'confirm-password-placeholder': 'Repeat password',
+        'product-name-placeholder': 'Enter product name',
+        'price-placeholder': '0.00',
+        'description-placeholder': 'Enter product description...',
+        'image-url-placeholder': 'assets/images/chair.png',
     },
     'ru': {
         // Navigation
@@ -356,8 +416,7 @@ const i18Obj = {
         'sunday': 'Воскресенье:',
         'closed': 'Закрыто',
         'footer-text': 'Вопреки распространенному мнению, Lorem Ipsum - это не просто случайный текст на латыни.',
-        'copyright': '2021 Greenery. Все права защищены',  
-
+        'copyright': '2021 Greenery. Все права защищены',
         
         // Catalog page
         'catalog-title': 'Наш Каталог',
@@ -445,6 +504,42 @@ const i18Obj = {
         'attempts-left': 'Осталось попыток генерации:',
         'generate-manual': 'Введите никнейм вручную (только английские буквы)',
         
+        // Error messages
+        'phone-error': 'Введите корректный номер телефона РБ (+375XXXXXXXXX или 375XXXXXXXXX)',
+        'email-error': 'Введите корректный email адрес',
+        'birth-error': 'Укажите дату рождения',
+        'birth-error-age': 'Вам должно быть не менее 16 лет (сейчас {{age}} лет)',
+        'firstname-error': 'Укажите имя',
+        'lastname-error': 'Укажите фамилию',
+        'nickname-error': 'Никнейм может содержать только английские буквы (A-Z, a-z), цифры (0-9) и символы _, -, .',
+        'nickname-exists': 'Такой никнейм уже существует, попробуйте другой',
+        'nickname-min-length': 'Никнейм должен содержать минимум 3 символа',
+        'nickname-max-length': 'Никнейм должен содержать не более 30 символов',
+        'nickname-english-only': 'Никнейм может содержать только английские буквы! Русские буквы запрещены.',
+        'password-error': 'Пароль должен содержать: минимум 8 символов, заглавную и строчную буквы, цифру и спецсимвол',
+        'password-match-error': 'Пароли не совпадают',
+        'agreement-error': 'Необходимо принять Соглашение пользователя',
+        'generate-success': 'Сгенерирован новый никнейм: {{nickname}}',
+        'generate-error': 'Сгенерированный никнейм уже занят, попробуйте еще раз',
+        'generate-attempts-exhausted': 'Вы исчерпали 5 попыток генерации. Теперь вы можете ввести никнейм вручную',
+        'attempts-left': 'Осталось попыток генерации: {{attempts}}',
+        'attempts-exhausted-warning': '⚠️ Попытки генерации исчерпаны. Введите никнейм вручную (только английские буквы)',
+        'nickname-manual-placeholder': 'Введите никнейм вручную (только английские буквы)',
+        'nickname-auto-placeholder': 'Будет сгенерирован автоматически',
+        'age-hint-info': 'Минимальный возраст для регистрации: 16 лет',
+        'age-hint-success': 'Возраст: {{age}} лет - соответствует требованиям',
+        'age-hint-warning': 'Возраст: {{age}} лет - требуется не менее 16 лет',
+        'register-success': 'Регистрация успешна! Теперь вы можете войти',
+        'register-error': 'Ошибка при регистрации: {{error}}',
+        'phone-unique-error': 'Пользователь с таким номером телефона уже существует',
+        'email-unique-error': 'Пользователь с таким email уже существует',
+        'nickname-unique-error': 'Такой никнейм уже занят, попробуйте другой',
+        'fill-fields-error': 'Заполните все поля',
+        'login-error': 'Неверный email или пароль',
+        'user-not-found': 'Пользователь с таким email не найден',
+        'wrong-password': 'Неверный пароль',
+        'generate-firstname-lastname': 'Сначала введите имя и фамилию',
+        
         // Admin page
         'admin-panel': '👑 Админ-панель',
         'admin-subtitle': 'Управление товарами и отзывами',
@@ -472,6 +567,18 @@ const i18Obj = {
         'confirm-delete': 'Подтверждение удаления',
         'delete-confirm-text': 'Вы уверены, что хотите удалить этот элемент? Это действие нельзя отменить.',
         
+        // Admin modal
+        'product-name': 'Название товара',
+        'price': 'Цена (£)',
+        'description': 'Описание',
+        'image-url': 'URL изображения',
+        'stock': 'Наличие',
+        'rating': 'Рейтинг',
+        'confirm': 'Подтвердить',
+        'cancel': 'Отмена',
+        'add-product-title': 'Добавление товара',
+        'edit-product-title': 'Редактирование товара',
+        
         // Profile modal
         'personal-data': '👤 Личные данные',
         'theme': 'Тема',
@@ -491,7 +598,20 @@ const i18Obj = {
         'no-description': 'Нет описания',
         'add-to-cart-detail': '🛒 Добавить в корзину',
         'add-to-favorites': '🤍 В избранное',
-        'remove-from-favorites': '❤️ В избранном'
+        'remove-from-favorites': '❤️ В избранном',
+
+        // Placeholders
+        'email-placeholder': 'example@mail.com',
+        'password-placeholder': 'Введите пароль',
+        'phone-placeholder': '+375291234567',
+        'firstname-placeholder': 'Иван',
+        'lastname-placeholder': 'Петров',
+        'patronymic-placeholder': 'Иванович',
+        'confirm-password-placeholder': 'Повторите пароль',
+        'product-name-placeholder': 'Введите название товара',
+        'price-placeholder': '0.00',
+        'description-placeholder': 'Введите описание товара...',
+        'image-url-placeholder': 'assets/images/chair.png',
     }
 };
 
@@ -515,12 +635,20 @@ function translatePage(lang) {
         }
     });
     
+    // Обновляем опции select
+    document.querySelectorAll('select option').forEach(option => {
+        const key = option.getAttribute('data-i18n');
+        if (key && i18Obj[lang] && i18Obj[lang][key]) {
+            option.textContent = i18Obj[lang][key];
+        }
+    });
+    
     updateActiveLanguageButton(lang);
     localStorage.setItem('language', lang);
     currentLang = lang;
     
     if (window.ToastManager) {
-        window.ToastManager.show(`Язык: ${lang === 'en' ? 'English' : 'Русский'}`, 'info', 1500);
+        window.ToastManager.show(`Language: ${lang === 'en' ? 'English' : 'Русский'}`, 'info', 1500);
     }
     
     updateDynamicContent(lang);
@@ -539,13 +667,6 @@ function updateDynamicContent(lang) {
             el.innerHTML = i18Obj[lang]['in-stock'] || (lang === 'ru' ? '✓ В наличии' : '✓ In stock');
         } else {
             el.innerHTML = i18Obj[lang]['out-of-stock'] || (lang === 'ru' ? '✗ Нет в наличии' : '✗ Out of stock');
-        }
-    });
-    
-    document.querySelectorAll('select option').forEach(option => {
-        const key = option.getAttribute('data-i18n');
-        if (key && i18Obj[lang][key]) {
-            option.textContent = i18Obj[lang][key];
         }
     });
 }
@@ -631,8 +752,25 @@ function addLanguageSwitcherStyles() {
     document.head.appendChild(style);
 }
 
+function getCurrentLanguage() {
+    return localStorage.getItem('language') || 'en';
+}
+
+function translate(key, params = {}) {
+    const lang = getCurrentLanguage();
+    let text = i18Obj[lang]?.[key] || i18Obj['en'][key] || key;
+    
+    Object.keys(params).forEach(param => {
+        text = text.replace(`{{${param}}}`, params[param]);
+    });
+    
+    return text;
+}
+
 window.translatePage = translatePage;
 window.initLanguageSwitcher = initLanguageSwitcher;
+window.getCurrentLanguage = getCurrentLanguage;
+window.translate = translate;
 
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
